@@ -1,0 +1,11 @@
+EngiStore Pro 2.0 - Windows EXE/Installer Build
+
+1. Install Node.js LTS on Windows.
+2. Extract this folder.
+3. Double-click build_windows.bat.
+4. The script installs Electron/electron-builder if needed.
+5. It runs: npm run build
+6. The Windows NSIS installer is created in the dist folder.
+7. The installer creates a Desktop shortcut named "EngiStore Pro" and a Start Menu shortcut.
+
+Important: This build script needs internet access on the Windows PC the first time because npm must download Electron/electron-builder.

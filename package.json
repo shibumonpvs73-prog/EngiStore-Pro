@@ -1,0 +1,15 @@
+{
+  "name": "engistore-pro",
+  "version": "2.0.0",
+  "description": "Engineering Purchase & Inventory Software",
+  "main": "main.js",
+  "scripts": {"start":"electron .","build":"electron-builder --win nsis"},
+  "devDependencies": {"electron":"^31.0.0","electron-builder":"^24.13.3"},
+  "build": {
+    "appId":"com.bmlparenteral.engistore",
+    "productName":"EngiStore Pro",
+    "icon":"icon.ico",
+    "win":{"target":["nsis"],"icon":"icon.ico"},
+    "nsis":{"oneClick":false,"allowToChangeInstallationDirectory":true,"createDesktopShortcut":true,"createStartMenuShortcut":true,"shortcutName":"EngiStore Pro"}
+  }
+}
