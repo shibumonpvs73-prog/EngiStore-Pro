@@ -1,0 +1,22 @@
+ENGISTORE PRO - GITHUB FREE AUTO UPDATE
+
+Repository:
+https://github.com/shibumonpvs73-prog/EngiStore-Pro
+
+Current release tag:
+v2.3.0
+
+How to publish:
+1. Commit/push this project to GitHub.
+2. Create/push a version tag, for example:
+   git tag v2.3.0
+   git push origin v2.3.0
+3. GitHub Actions will run .github/workflows/release.yml on Windows.
+4. It will build the NSIS installer and publish the update files to the GitHub Release.
+5. The installed EngiStore Pro can use "Check for Update" to find the release.
+
+IMPORTANT:
+- Do not upload node_modules.
+- Keep package.json version equal to the release tag version.
+- For the next update, change version to 2.3.1, commit, then tag v2.3.1 and push it.
+- Existing localStorage application data is not deleted by the updater.

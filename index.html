@@ -30,7 +30,7 @@ table{width:100%;border-collapse:collapse}th,td{padding:11px;border-bottom:1px s
 <button onclick="show('po',this)">▤ Purchase Orders</button><button onclick="show('receive',this)">⇩ Receive Material</button>
 <button onclick="show('stock',this)">◈ Stock</button><button onclick="show('issue',this)">↗ Issue Material</button><button onclick="show('issued',this)">↗ Issued Items</button>
 <button onclick="show('sup',this)">♙ Suppliers</button>
-<button onclick="show('reports',this)">▥ Reports</button>
+<button onclick="show('reports',this)">▥ Reports</button><button onclick="checkForUpdate()">↻ Check for Update</button>
 </div></aside>
 <main class="main"><div class="top" style="margin-top:62px"><b id="title">Dashboard</b><span class="muted">Administrator</span></div><div class="content">
 
@@ -180,7 +180,21 @@ function printPR(x){
  <tr><td>${x.id}</td><td>${x.spec}</td><td>${x.qty} ${x.unit}</td><td>${x.remarks||''}</td></tr></table>
  <div class="sign"><span>Requested By: __________________</span><span>Approved By: __________________</span></div>
  <div style="margin-top:28px;text-align:center"><button onclick="window.print()" style="padding:9px 18px;font-weight:700">PRINT</button></div>
- </body></html>`);w.document.close()
+ 
+<div id="updateStatus" style="display:none;position:fixed;right:22px;bottom:22px;background:#12233f;color:#fff;padding:14px 18px;border-radius:10px;box-shadow:0 8px 30px #0003;z-index:9999;max-width:360px;font-size:13px"></div>
+<script>
+function showUpdate(msg,button){var e=document.getElementById('updateStatus');e.innerHTML=msg+(button||'');e.style.display='block';}
+function checkForUpdate(){if(!window.engistoreUpdate){alert('Update service is not available in this build.');return;}showUpdate('Checking for update...');window.engistoreUpdate.check().then(function(r){if(r&&r.error)showUpdate('Update check failed: '+r.error);});}
+if(window.engistoreUpdate){window.engistoreUpdate.onStatus(function(x){
+ if(x.type==='checking')showUpdate('Checking for update...');
+ else if(x.type==='none'){showUpdate('You are using the latest version.');setTimeout(function(){document.getElementById('updateStatus').style.display='none';},3500);}
+ else if(x.type==='available')showUpdate('New version '+x.version+' is available. Downloading...');
+ else if(x.type==='progress')showUpdate('Downloading update: '+x.percent+'%');
+ else if(x.type==='downloaded')showUpdate('Update '+x.version+' is ready. <button class="btn" onclick="window.engistoreUpdate.install()" style="margin-left:8px">Install & Restart</button>');
+ else if(x.type==='error')showUpdate('Update error: '+x.message);
+ });}
+</script>
+</body></html>`);w.document.close()
 }
 function printSelectedIndent(){
  const ind=String(printIndent.value||'').trim();
@@ -204,7 +218,21 @@ function printSelectedIndent(){
  <table><tr><th>SR.No.</th><th>Item Name / Spec.</th><th>Qty.</th><th>Purpose</th></tr>${body}</table>
  <div class="sign"><span>Requested By: __________________</span><span>Approved By: __________________</span></div>
  <div style="margin-top:28px;text-align:center"><button onclick="window.print()" style="padding:9px 18px;font-weight:700">PRINT</button></div>
- </body></html>`);
+ 
+<div id="updateStatus" style="display:none;position:fixed;right:22px;bottom:22px;background:#12233f;color:#fff;padding:14px 18px;border-radius:10px;box-shadow:0 8px 30px #0003;z-index:9999;max-width:360px;font-size:13px"></div>
+<script>
+function showUpdate(msg,button){var e=document.getElementById('updateStatus');e.innerHTML=msg+(button||'');e.style.display='block';}
+function checkForUpdate(){if(!window.engistoreUpdate){alert('Update service is not available in this build.');return;}showUpdate('Checking for update...');window.engistoreUpdate.check().then(function(r){if(r&&r.error)showUpdate('Update check failed: '+r.error);});}
+if(window.engistoreUpdate){window.engistoreUpdate.onStatus(function(x){
+ if(x.type==='checking')showUpdate('Checking for update...');
+ else if(x.type==='none'){showUpdate('You are using the latest version.');setTimeout(function(){document.getElementById('updateStatus').style.display='none';},3500);}
+ else if(x.type==='available')showUpdate('New version '+x.version+' is available. Downloading...');
+ else if(x.type==='progress')showUpdate('Downloading update: '+x.percent+'%');
+ else if(x.type==='downloaded')showUpdate('Update '+x.version+' is ready. <button class="btn" onclick="window.engistoreUpdate.install()" style="margin-left:8px">Install & Restart</button>');
+ else if(x.type==='error')showUpdate('Update error: '+x.message);
+ });}
+</script>
+</body></html>`);
  w.document.close();
 }
 function printCurrentPR(){
@@ -232,7 +260,21 @@ function printPO(x){
  const cname=localStorage.getItem('companyName')||'BML Parenteral Drugs', caddress=localStorage.getItem('companyAddress')||'Raipur Bhagwanpur Roorkee (Ukh)-247661';
  const a=poAmounts(x.qty,x.rate,x.discount,x.gst);
  const w=window.open('','_blank','width=1000,height=750');
- w.document.write(`<html><head><title>Purchase Order - ${x.id}</title><style>body{font-family:Arial;padding:32px;color:#111}.company{text-align:center}.company b{font-size:22px}.company span{display:block;font-size:12px;margin-top:4px}.title{text-align:center;font-size:19px;font-weight:700;margin:18px 0}.meta{display:flex;justify-content:space-between;margin:10px 0 18px;font-size:13px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #333;padding:9px;font-size:12px}th{background:#f2f2f2;text-align:left}.totals{margin-left:auto;width:340px;margin-top:15px}.totals div{display:flex;justify-content:space-between;padding:5px}.final{font-weight:700;border-top:2px solid #111;font-size:14px}.sign{margin-top:80px;display:flex;justify-content:space-between;font-size:12px}</style></head><body><div class="company"><b>${cname}</b><span>${caddress}</span></div><div class="title">PURCHASE ORDER</div><div class="meta"><span><b>PO No.:</b> ${x.id}</span><span><b>Date:</b> ${x.date||new Date().toLocaleDateString('en-IN')}</span></div><p><b>Supplier:</b> ${x.supplier}</p><table><tr><th>Sr.No.</th><th>Material</th><th>Qty.</th><th>Unit</th><th>Rate</th><th>Amount</th></tr><tr><td>1</td><td>${x.material}</td><td>${x.qty}</td><td>${x.unit||'Nos.'}</td><td>₹ ${(+x.rate||0).toFixed(2)}</td><td>₹ ${a.subtotal.toFixed(2)}</td></tr></table><div class="totals"><div><span>Subtotal</span><b>₹ ${a.subtotal.toFixed(2)}</b></div><div><span>Discount (${+x.discount||0}%)</span><b>- ₹ ${a.discountAmount.toFixed(2)}</b></div><div><span>GST (${+x.gst||0}%)</span><b>₹ ${a.gstAmount.toFixed(2)}</b></div><div class="final"><span>FINAL AMOUNT</span><b>₹ ${a.finalAmount.toFixed(2)}</b></div></div><div class="sign"><span>Prepared By: __________________</span><span>Approved By: __________________</span></div><div style="text-align:center;margin-top:25px"><button onclick="window.print()">PRINT</button></div></body></html>`);w.document.close();
+ w.document.write(`<html><head><title>Purchase Order - ${x.id}</title><style>body{font-family:Arial;padding:32px;color:#111}.company{text-align:center}.company b{font-size:22px}.company span{display:block;font-size:12px;margin-top:4px}.title{text-align:center;font-size:19px;font-weight:700;margin:18px 0}.meta{display:flex;justify-content:space-between;margin:10px 0 18px;font-size:13px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #333;padding:9px;font-size:12px}th{background:#f2f2f2;text-align:left}.totals{margin-left:auto;width:340px;margin-top:15px}.totals div{display:flex;justify-content:space-between;padding:5px}.final{font-weight:700;border-top:2px solid #111;font-size:14px}.sign{margin-top:80px;display:flex;justify-content:space-between;font-size:12px}</style></head><body><div class="company"><b>${cname}</b><span>${caddress}</span></div><div class="title">PURCHASE ORDER</div><div class="meta"><span><b>PO No.:</b> ${x.id}</span><span><b>Date:</b> ${x.date||new Date().toLocaleDateString('en-IN')}</span></div><p><b>Supplier:</b> ${x.supplier}</p><table><tr><th>Sr.No.</th><th>Material</th><th>Qty.</th><th>Unit</th><th>Rate</th><th>Amount</th></tr><tr><td>1</td><td>${x.material}</td><td>${x.qty}</td><td>${x.unit||'Nos.'}</td><td>₹ ${(+x.rate||0).toFixed(2)}</td><td>₹ ${a.subtotal.toFixed(2)}</td></tr></table><div class="totals"><div><span>Subtotal</span><b>₹ ${a.subtotal.toFixed(2)}</b></div><div><span>Discount (${+x.discount||0}%)</span><b>- ₹ ${a.discountAmount.toFixed(2)}</b></div><div><span>GST (${+x.gst||0}%)</span><b>₹ ${a.gstAmount.toFixed(2)}</b></div><div class="final"><span>FINAL AMOUNT</span><b>₹ ${a.finalAmount.toFixed(2)}</b></div></div><div class="sign"><span>Prepared By: __________________</span><span>Approved By: __________________</span></div><div style="text-align:center;margin-top:25px"><button onclick="window.print()">PRINT</button></div>
+<div id="updateStatus" style="display:none;position:fixed;right:22px;bottom:22px;background:#12233f;color:#fff;padding:14px 18px;border-radius:10px;box-shadow:0 8px 30px #0003;z-index:9999;max-width:360px;font-size:13px"></div>
+<script>
+function showUpdate(msg,button){var e=document.getElementById('updateStatus');e.innerHTML=msg+(button||'');e.style.display='block';}
+function checkForUpdate(){if(!window.engistoreUpdate){alert('Update service is not available in this build.');return;}showUpdate('Checking for update...');window.engistoreUpdate.check().then(function(r){if(r&&r.error)showUpdate('Update check failed: '+r.error);});}
+if(window.engistoreUpdate){window.engistoreUpdate.onStatus(function(x){
+ if(x.type==='checking')showUpdate('Checking for update...');
+ else if(x.type==='none'){showUpdate('You are using the latest version.');setTimeout(function(){document.getElementById('updateStatus').style.display='none';},3500);}
+ else if(x.type==='available')showUpdate('New version '+x.version+' is available. Downloading...');
+ else if(x.type==='progress')showUpdate('Downloading update: '+x.percent+'%');
+ else if(x.type==='downloaded')showUpdate('Update '+x.version+' is ready. <button class="btn" onclick="window.engistoreUpdate.install()" style="margin-left:8px">Install & Restart</button>');
+ else if(x.type==='error')showUpdate('Update error: '+x.message);
+ });}
+</script>
+</body></html>`);w.document.close();
 }
 function editPO(i){let x=D.pos[i];if(!x)return;supplier.value=x.supplier||'';pomaterial.value=x.material||'';poqty.value=x.qty||'';pounit.value=x.unit||'Nos.';rate.value=x.rate||0;discount.value=x.discount||0;gst.value=(x.gst===undefined?18:x.gst);editingPOIndex=i;calcPOPreview();savePOBtn.textContent='Update Purchase Order';cancelPOBtn.style.display='inline-block';show('po')}
 function cancelPOEdit(){clearPOForm()}
@@ -266,4 +308,18 @@ function refresh(){
  rv.textContent='₹ '+D.pos.reduce((a,x)=>a+x.total,0).toFixed(2);rs.textContent=D.sup.length;
 }
 function report(){let rows=[['Type','SR.No','Indent No.','Date','Department','Material Specification','Qty','Unit','Delivery','Status'],...D.prs.map(x=>['Purchase Request',x.id,x.indent||'',x.date,x.dept,x.spec,x.qty,x.unit,x.delivery,x.status]),...D.pos.map(x=>['Purchase Order',x.id,'','',x.material,x.qty,'','',x.status])];let csv=rows.map(r=>r.map(x=>`"${String(x).replaceAll('"','""')}"`).join(',')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='EngiStore_Report.csv';a.click()}
-</script></body></html>
+</script>
+<div id="updateStatus" style="display:none;position:fixed;right:22px;bottom:22px;background:#12233f;color:#fff;padding:14px 18px;border-radius:10px;box-shadow:0 8px 30px #0003;z-index:9999;max-width:360px;font-size:13px"></div>
+<script>
+function showUpdate(msg,button){var e=document.getElementById('updateStatus');e.innerHTML=msg+(button||'');e.style.display='block';}
+function checkForUpdate(){if(!window.engistoreUpdate){alert('Update service is not available in this build.');return;}showUpdate('Checking for update...');window.engistoreUpdate.check().then(function(r){if(r&&r.error)showUpdate('Update check failed: '+r.error);});}
+if(window.engistoreUpdate){window.engistoreUpdate.onStatus(function(x){
+ if(x.type==='checking')showUpdate('Checking for update...');
+ else if(x.type==='none'){showUpdate('You are using the latest version.');setTimeout(function(){document.getElementById('updateStatus').style.display='none';},3500);}
+ else if(x.type==='available')showUpdate('New version '+x.version+' is available. Downloading...');
+ else if(x.type==='progress')showUpdate('Downloading update: '+x.percent+'%');
+ else if(x.type==='downloaded')showUpdate('Update '+x.version+' is ready. <button class="btn" onclick="window.engistoreUpdate.install()" style="margin-left:8px">Install & Restart</button>');
+ else if(x.type==='error')showUpdate('Update error: '+x.message);
+ });}
+</script>
+</body></html>
