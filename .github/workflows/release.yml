@@ -1,10 +1,10 @@
 name: Build and Publish EngiStore Pro
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*.*.*'
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -20,12 +20,20 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Build and publish Windows installer
+      - name: Build Windows installer
+        run: npm run dist
+
+      - name: Upload installer to GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run release
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v$VERSION"
+          echo "Uploading installer for $TAG"
+          gh release upload "$TAG" dist/*.exe --clobber
