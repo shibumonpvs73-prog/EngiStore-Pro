@@ -3026,136 +3026,257 @@ a.click();
 
 
 /* =====================================================
-   UPDATE
+   AUTO UPDATE
 ===================================================== */
 
-function showUpdate(
-message,
-buttonHtml=''
-){
+function showUpdate(message, buttonHtml = '') {
 
-const box=
-document.getElementById('updateStatus');
+  const box = document.getElementById('updateStatus');
 
-box.innerHTML=
-message+buttonHtml;
+  if (!box) return;
 
-box.style.display='block';
+  box.innerHTML =
+    '<div>' + message + '</div>' +
+    buttonHtml;
+
+  box.style.display = 'block';
+}
+
+
+function hideUpdate() {
+
+  const box = document.getElementById('updateStatus');
+
+  if (box) {
+    box.style.display = 'none';
+  }
 
 }
 
 
-function checkForUpdate(){
+/* =====================================================
+   MANUAL CHECK
+===================================================== */
 
-if(!window.engistoreUpdate){
+function checkForUpdate() {
 
-showUpdate(
-'Update service is not available. Please install the latest build.'
-);
+  if (!window.engistoreUpdate) {
 
-return;
+    showUpdate(
+      'Update service is not available.'
+    );
 
-}
+    return;
+  }
 
-showUpdate(
-'Checking for update...'
-);
+  showUpdate(
+    '🔄 Checking for update...'
+  );
 
-window.engistoreUpdate.check()
-.then(function(result){
+  window.engistoreUpdate.check()
 
-if(result&&result.error){
+    .then(function(result) {
 
-showUpdate(
-'Update check failed: '+
-result.error
-);
+      if (
+        result &&
+        result.success === false
+      ) {
 
-}
+        showUpdate(
+          'Update check failed: ' +
+          (result.error || 'Unknown error')
+        );
 
-})
-.catch(function(error){
+      }
 
-showUpdate(
-'Update check failed: '+
-error.message
-);
+    })
 
-});
+    .catch(function(error) {
 
-}
+      showUpdate(
+        'Update check failed: ' +
+        (error.message || 'Unknown error')
+      );
 
-
-if(window.engistoreUpdate){
-
-window.engistoreUpdate.onStatus(function(x){
-
-if(!x)return;
-
-if(x.type==='checking'){
-
-showUpdate(
-'Checking for update...'
-);
+    });
 
 }
 
-else if(x.type==='none'){
 
-showUpdate(
-'You are using the latest version.'
-);
+/* =====================================================
+   UPDATE STATUS
+===================================================== */
 
-setTimeout(function(){
+if (window.engistoreUpdate) {
 
-document.getElementById(
-'updateStatus'
-).style.display='none';
+  window.engistoreUpdate.onStatus(function(x) {
 
-},3500);
+    if (!x) return;
+
+
+    /* CHECKING */
+
+    if (x.type === 'checking') {
+
+      showUpdate(
+        '🔄 Checking for update...'
+      );
+
+    }
+
+
+    /* UPDATE AVAILABLE */
+
+    else if (x.type === 'available') {
+
+      showUpdate(
+        '🆕 New version ' +
+        x.version +
+        ' found.<br>' +
+        'Downloading update...'
+      );
+
+    }
+
+
+    /* DOWNLOAD PROGRESS */
+
+    else if (x.type === 'progress') {
+
+      const percent =
+        Math.max(
+          0,
+          Math.min(
+            100,
+            Number(x.percent || 0)
+          )
+        );
+
+      showUpdate(
+
+        '⬇️ Downloading EngiStore Pro update...<br>' +
+
+        '<b style="font-size:18px">' +
+        percent +
+        '%</b>'
+
+      );
+
+    }
+
+
+    /* DOWNLOAD COMPLETE */
+
+    else if (x.type === 'downloaded') {
+
+      showUpdate(
+
+        '✅ Update ' +
+        x.version +
+        ' downloaded successfully.<br>' +
+        'Restart EngiStore Pro to install.',
+
+        '<div style="margin-top:10px">' +
+
+        '<button class="btn" ' +
+        'onclick="installUpdate()">' +
+
+        'Install & Restart' +
+
+        '</button>' +
+
+        '</div>'
+
+      );
+
+    }
+
+
+    /* NO UPDATE */
+
+    else if (x.type === 'none') {
+
+      showUpdate(
+        '✓ EngiStore Pro is already up to date.'
+      );
+
+      setTimeout(
+        hideUpdate,
+        4000
+      );
+
+    }
+
+
+    /* ERROR */
+
+    else if (x.type === 'error') {
+
+      showUpdate(
+
+        '❌ Update error:<br>' +
+
+        (x.message ||
+        'Unknown update error')
+
+      );
+
+    }
+
+  });
 
 }
 
-else if(x.type==='available'){
 
-showUpdate(
-'New version '+
-x.version+
-' is available. Starting download...'
-);
+/* =====================================================
+   INSTALL UPDATE
+===================================================== */
 
-}
+function installUpdate() {
 
-else if(x.type==='progress'){
+  if (!window.engistoreUpdate) {
 
-showUpdate(
-'Downloading update: '+
-x.percent+'%'
-);
+    showUpdate(
+      'Update service is not available.'
+    );
 
-}
+    return;
 
-else if(x.type==='downloaded'){
+  }
 
-showUpdate(
-'Update '+
-x.version+
-' is ready.',
-'<button class="btn" onclick="window.engistoreUpdate.install()">Install & Restart</button>'
-);
+  showUpdate(
+    'Installing update...<br>' +
+    'EngiStore Pro will restart automatically.'
+  );
 
-}
+  window.engistoreUpdate.install()
 
-else if(x.type==='error'){
+    .then(function(result) {
 
-showUpdate(
-'Update error: '+
-(x.message||'Unknown error')
-);
+      if (
+        result &&
+        result.success === false
+      ) {
 
-}
+        showUpdate(
+          'Install failed: ' +
+          (result.error ||
+          'Unknown error')
+        );
 
-});
+      }
+
+    })
+
+    .catch(function(error) {
+
+      showUpdate(
+        'Install failed: ' +
+        (error.message ||
+        'Unknown error')
+      );
+
+    });
 
 }
 
