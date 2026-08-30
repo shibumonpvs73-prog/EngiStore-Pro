@@ -1,325 +1,1940 @@
 <!doctype html>
-<html><head><meta charset="UTF-8"><title>EngiStore Pro</title>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>EngiStore Pro</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial;background:#f4f6f9;color:#172033}
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Arial;background:#f4f6f9;color:#172033}
 .login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#eaf0f7}
 .box{background:#fff;padding:35px;width:390px;border-radius:14px;box-shadow:0 15px 45px #0002}
-h1{margin:0 0 5px;color:#12233f}input,select,textarea{width:100%;padding:10px;border:1px solid #d0d5dd;border-radius:7px;margin:5px 0 12px}
-label{font-size:12px;font-weight:700}.btn{border:0;border-radius:7px;padding:10px 15px;background:#245b9e;color:#fff;font-weight:700;cursor:pointer}
-.app{display:none;height:100vh}.side{width:235px;background:#12233f;color:white;padding:20px 12px}.brand{font-size:21px;font-weight:800;padding:5px 10px 25px}.brand small{display:block;font-size:10px;color:#aebed3}
-.nav button{width:100%;padding:12px;border:0;background:none;color:#dce6f2;text-align:left;border-radius:7px;cursor:pointer;font-size:14px;margin:2px 0}.nav button:hover,.nav button.active{background:#244a76;color:#fff}
-.main{flex:1;overflow:auto}.top{height:62px;background:#fff;border-bottom:1px solid #e4e7ec;display:flex;align-items:center;justify-content:space-between;padding:0 24px}.content{padding:24px}.page{display:none}.page.active{display:block}
-.cards{display:flex;gap:14px}.card{background:#fff;border:1px solid #e5e9ef;border-radius:12px;padding:18px;flex:1}.muted{color:#667085;font-size:13px}.num{font-size:28px;font-weight:800;margin-top:6px}
-.panel{background:#fff;border:1px solid #e5e9ef;border-radius:12px;padding:18px;margin-top:16px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-table{width:100%;border-collapse:collapse}th,td{padding:11px;border-bottom:1px solid #edf0f3;text-align:left;font-size:13px}th{background:#f8fafc;color:#667085}.actions{display:flex;gap:8px;margin-top:12px}.badge{padding:4px 8px;border-radius:20px;background:#edf3ff;color:#245b9e;font-size:11px}.low{background:#fff0f0;color:#b42318}
-@media(max-width:900px){.side{width:190px}.grid{grid-template-columns:1fr 1fr}}
-</style></head>
+h1{margin:0 0 5px;color:#12233f}
+input,select,textarea{width:100%;padding:10px;border:1px solid #d0d5dd;border-radius:7px;margin:5px 0 12px}
+label{font-size:12px;font-weight:700}
+.btn{border:0;border-radius:7px;padding:10px 15px;background:#245b9e;color:#fff;font-weight:700;cursor:pointer}
+.btn:hover{opacity:.9}
+.app{display:none;height:100vh}
+.side{width:235px;background:#12233f;color:white;padding:20px 12px}
+.brand{font-size:21px;font-weight:800;padding:5px 10px 25px}
+.brand small{display:block;font-size:10px;color:#aebed3}
+.nav button{width:100%;padding:12px;border:0;background:none;color:#dce6f2;text-align:left;border-radius:7px;cursor:pointer;font-size:14px;margin:2px 0}
+.nav button:hover,.nav button.active{background:#244a76;color:#fff}
+.main{flex:1;overflow:auto}
+.top{height:62px;background:#fff;border-bottom:1px solid #e4e7ec;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+.content{padding:24px}
+.page{display:none}
+.page.active{display:block}
+.cards{display:flex;gap:14px}
+.card{background:#fff;border:1px solid #e5e9ef;border-radius:12px;padding:18px;flex:1}
+.muted{color:#667085;font-size:13px}
+.num{font-size:28px;font-weight:800;margin-top:6px}
+.panel{background:#fff;border:1px solid #e5e9ef;border-radius:12px;padding:18px;margin-top:16px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.full{grid-column:1/-1}
+table{width:100%;border-collapse:collapse}
+th,td{padding:11px;border-bottom:1px solid #edf0f3;text-align:left;font-size:13px}
+th{background:#f8fafc;color:#667085}
+.actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.badge{padding:4px 8px;border-radius:20px;background:#edf3ff;color:#245b9e;font-size:11px}
+.low{background:#fff0f0;color:#b42318}
+#updateStatus{display:none;position:fixed;right:22px;bottom:22px;background:#12233f;color:#fff;padding:14px 18px;border-radius:10px;box-shadow:0 8px 30px #0003;z-index:9999;max-width:400px;font-size:13px}
+@media(max-width:900px){
+.side{width:190px}
+.grid{grid-template-columns:1fr 1fr}
+.cards{flex-wrap:wrap}
+.card{min-width:180px}
+}
+</style>
+</head>
+
 <body>
-<div id="login" class="login"><div class="box"><h1>EngiStore Pro</h1><div class="muted">Engineering Purchase & Inventory</div>
-<p><label>Username</label><input id="u" value="admin"></p><p><label>Password</label><input id="p" type="password" value="admin"></p>
-<button class="btn" style="width:100%" onclick="signin()">SIGN IN</button><p class="muted">Demo: admin / admin</p></div></div>
+
+<div id="login" class="login">
+<div class="box">
+<h1>EngiStore Pro</h1>
+<div class="muted">Engineering Purchase & Inventory</div>
+
+<p>
+<label>Username</label>
+<input id="u" value="admin" autocomplete="username">
+</p>
+
+<p>
+<label>Password</label>
+<input id="p" type="password" value="admin" autocomplete="current-password">
+</p>
+
+<button class="btn" style="width:100%" onclick="signin()">SIGN IN</button>
+
+<p class="muted">Demo Login: admin / admin</p>
+</div>
+</div>
+
 <div id="app" class="app">
+
 <div id="companyHeader" style="position:fixed;top:0;left:235px;right:0;height:62px;background:#fff;border-bottom:1px solid #e4e7ec;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:2;pointer-events:none">
 <b id="companyName" style="font-size:16px;color:#12233f">BML Parenteral Drugs</b>
-<span id="companyAddress" style="font-size:11px;color:#667085">Raipur Bhagwanpur Roorkee (Ukh)-247661</span>
+<span id="companyAddress" style="font-size:11px;color:#667085">Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661</span>
 </div>
-<aside class="side"><div class="brand">EngiStore Pro<small>Engineering Purchase & Inventory</small></div>
+
+<aside class="side">
+
+<div class="brand">
+EngiStore Pro
+<small>Engineering Purchase & Inventory</small>
+</div>
+
 <div class="nav">
 <button class="active" onclick="show('dashboard',this)">▣ Dashboard</button>
 <button onclick="show('pr',this)">＋ Purchase Request</button>
-<button onclick="show('po',this)">▤ Purchase Orders</button><button onclick="show('receive',this)">⇩ Receive Material</button>
-<button onclick="show('stock',this)">◈ Stock</button><button onclick="show('issue',this)">↗ Issue Material</button><button onclick="show('issued',this)">↗ Issued Items</button>
+<button onclick="show('po',this)">▤ Purchase Orders</button>
+<button onclick="show('receive',this)">⇩ Receive Material</button>
+<button onclick="show('stock',this)">◈ Stock</button>
+<button onclick="show('issue',this)">↗ Issue Material</button>
+<button onclick="show('issued',this)">↗ Issued Items</button>
 <button onclick="show('sup',this)">♙ Suppliers</button>
-<button onclick="show('reports',this)">▥ Reports</button><button onclick="checkForUpdate()">↻ Check for Update</button>
-</div></aside>
-<main class="main"><div class="top" style="margin-top:62px"><b id="title">Dashboard</b><span class="muted">Administrator</span></div><div class="content">
+<button onclick="show('reports',this)">▥ Reports</button>
+<button onclick="checkForUpdate()">↻ Check for Update</button>
+</div>
 
-<section id="dashboard" class="page active"><h2>Dashboard</h2><div class="muted">Engineering Purchase & Inventory Overview</div>
-<div class="cards" style="margin-top:18px"><div class="card muted">Purchase Requests<div class="num" id="mpr">0</div></div><div class="card muted">Purchase Orders<div class="num" id="mpo">0</div></div><div class="card muted">Low Stock<div class="num" id="mls">0</div></div><div class="card muted">Suppliers<div class="num" id="msup">0</div></div><div class="card muted">Issued Items<div class="num" id="missued">0</div></div></div>
-<div class="panel"><h3>Quick Actions</h3><div class="actions"><button class="btn" onclick="show('pr')">New Purchase Request</button><button class="btn" onclick="show('po')">Create Purchase Order</button></div></div></section>
+</aside>
 
-<section id="pr" class="page"><h2>Purchase Request</h2><div class="muted">Create, save and print purchase requests</div>
-<div class="panel"><div class="grid">
-<div><label>Indent No.</label><input id="indentNo" placeholder="Enter Indent No."></div>
-<div><label>Department</label><select id="dept"><option>Engineering</option><option>Maintenance</option><option>Production</option><option>Utility</option></select></div>
-<div><label>Material Specification</label><input id="rspec" placeholder="Enter complete material specification"></div>
-<div><label>Quantity</label><input id="rqty" type="number" min="0"></div>
-<div><label>Unit</label><select id="runit"><option>KG</option><option>Nos.</option><option>Meter</option><option>PKT</option><option>Box</option><option>Ltr</option><option>gm</option></select></div>
-<div><label>Delivery Option</label><select id="delivery"><option>Standard</option><option>Immediate</option><option>Most Urgent</option></select></div>
-<div><label>Required Date</label><input id="rdate" type="date"></div>
-<div class="full"><label>Purpose / Remarks</label><textarea id="remarks" placeholder="Reason or additional details"></textarea></div>
-</div><div class="actions">
+<main class="main">
+
+<div class="top" style="margin-top:62px">
+<b id="title">Dashboard</b>
+<span class="muted">Administrator</span>
+</div>
+
+<div class="content">
+
+<section id="dashboard" class="page active">
+
+<h2>Dashboard</h2>
+<div class="muted">Engineering Purchase & Inventory Overview</div>
+
+<div class="cards" style="margin-top:18px">
+
+<div class="card muted">
+Purchase Requests
+<div class="num" id="mpr">0</div>
+</div>
+
+<div class="card muted">
+Purchase Orders
+<div class="num" id="mpo">0</div>
+</div>
+
+<div class="card muted">
+Low Stock
+<div class="num" id="mls">0</div>
+</div>
+
+<div class="card muted">
+Suppliers
+<div class="num" id="msup">0</div>
+</div>
+
+<div class="card muted">
+Issued Items
+<div class="num" id="missued">0</div>
+</div>
+
+</div>
+
+<div class="panel">
+<h3>Quick Actions</h3>
+<div class="actions">
+<button class="btn" onclick="show('pr')">New Purchase Request</button>
+<button class="btn" onclick="show('po')">Create Purchase Order</button>
+</div>
+</div>
+
+</section>
+
+
+<section id="pr" class="page">
+
+<h2>Purchase Request</h2>
+<div class="muted">Create, save and print purchase requests</div>
+
+<div class="panel">
+
+<div class="grid">
+
+<div>
+<label>Indent No.</label>
+<input id="indentNo" placeholder="Enter Indent No.">
+</div>
+
+<div>
+<label>Department</label>
+<select id="dept">
+<option>Engineering</option>
+<option>Maintenance</option>
+<option>Production</option>
+<option>Utility</option>
+</select>
+</div>
+
+<div>
+<label>Material Specification</label>
+<input id="rspec" placeholder="Enter complete material specification">
+</div>
+
+<div>
+<label>Quantity</label>
+<input id="rqty" type="number" min="0">
+</div>
+
+<div>
+<label>Unit</label>
+<select id="runit">
+<option>Nos.</option>
+<option>KG</option>
+<option>Meter</option>
+<option>PKT</option>
+<option>Box</option>
+<option>Ltr</option>
+<option>gm</option>
+</select>
+</div>
+
+<div>
+<label>Delivery Option</label>
+<select id="delivery">
+<option>Standard</option>
+<option>Immediate</option>
+<option>Most Urgent</option>
+</select>
+</div>
+
+<div>
+<label>Required Date</label>
+<input id="rdate" type="date">
+</div>
+
+<div class="full">
+<label>Purpose / Remarks</label>
+<textarea id="remarks" placeholder="Reason or additional details"></textarea>
+</div>
+
+</div>
+
+<div class="actions">
 <button class="btn" id="savePRBtn" onclick="addPR()">Save Purchase Request</button>
 <button class="btn" id="cancelEditBtn" style="display:none;background:#667085" onclick="cancelEdit()">Cancel Edit</button>
 <button class="btn" onclick="printCurrentPR()">Print Purchase Request</button>
-</div></div>
-<div class="panel"><h3>Purchase Request File</h3>
-<div class="actions" style="align-items:end"><div style="min-width:260px"><label>Indent No.</label><select id="printIndent" onchange="autoSelectIndent()"><option value="">Select Indent No.</option></select></div><button class="btn" onclick="printSelectedIndent()">Print Same Indent Together</button></div>
-<div class="muted" style="margin-top:8px">Same Indent No. ke sabhi SR.No ek hi print me saath aayenge. Print tabhi hoga jab PRINT button dabayenge.</div>
-<table><thead><tr><th>SR.No</th><th>Indent No.</th><th>Date</th><th>Department</th><th>Item Name / Spec.</th><th>Qty.</th><th>Delivery</th><th>Actions</th></tr></thead><tbody id="aprfile"></tbody></table></div></section>
+</div>
 
-<section id="po" class="page"><h2>Purchase Orders</h2><div class="panel"><div class="grid">
-<div><label>Supplier</label><input id="supplier"></div><div><label>Material</label><input id="pomaterial"></div><div><label>Quantity</label><input id="poqty" type="number" min="0"></div><div><label>Unit</label><select id="pounit"><option>KG</option><option>Nos.</option><option>Meter</option><option>PKT</option><option>Box</option><option>Ltr</option><option>gm</option></select></div><div><label>Rate</label><input id="rate" type="number" min="0" step="0.01"></div><div><label>Discount (%)</label><input id="discount" type="number" min="0" step="0.01" value="0" oninput="calcPOPreview()"></div><div><label>GST (%)</label><input id="gst" type="number" min="0" step="0.01" value="18" oninput="calcPOPreview()"></div><div><label>Final Amount</label><input id="finalAmount" readonly></div>
-</div><div class="muted" id="poCalc" style="margin-top:4px">Subtotal: ₹ 0.00 | Discount: ₹ 0.00 | GST: ₹ 0.00</div><div class="actions"><button class="btn" id="savePOBtn" onclick="addPO()">Create Purchase Order</button><button class="btn" id="cancelPOBtn" style="display:none;background:#667085" onclick="cancelPOEdit()">Cancel Edit</button></div></div><div class="panel"><table><thead><tr><th>PO</th><th>Supplier</th><th>Material</th><th>Qty.</th><th>Subtotal</th><th>Discount</th><th>GST</th><th>Final Amount</th><th>Status</th><th>Actions</th></tr></thead><tbody id="apos"></tbody></table></div></section>
+</div>
 
-<section id="receive" class="page"><h2>Receive Material</h2><div class="muted">Receive material against a Purchase Order. Received quantity is automatically added to Stock.</div><div class="panel"><div class="grid"><div><label>Purchase Order</label><select id="receivePO" onchange="loadReceivePO()"><option value="">Select Purchase Order</option></select></div><div><label>Material</label><input id="receiveMaterial" readonly></div><div><label>Ordered Qty.</label><input id="receiveOrdered" readonly></div><div><label>Already Received</label><input id="receiveAlready" readonly></div><div><label>Receive Qty.</label><input id="receiveQty" type="number" min="0"></div><div><label>Receive Date</label><input id="receiveDate" type="date"></div><div><label>Remarks</label><input id="receiveRemarks"></div></div><div class="actions"><button class="btn" onclick="saveReceipt()">Receive & Add to Stock</button></div></div><div class="panel"><h3>Purchase Orders Pending / Partial Receipt</h3><table><thead><tr><th>PO</th><th>Supplier</th><th>Material</th><th>Ordered</th><th>Received</th><th>Balance</th><th>Status</th></tr></thead><tbody id="areceive"></tbody></table></div></section>
-<section id="issue" class="page"><h2>Issue Material</h2><div class="muted">Issue material from Stock. Stock quantity is automatically reduced.</div><div class="panel"><div class="grid"><div><label>Material</label><select id="issueMaterial" onchange="loadIssueStock()"><option value="">Select Material</option></select></div><div><label>Available Stock</label><input id="issueAvailable" readonly></div><div><label>Issue Qty.</label><input id="issueQty" type="number" min="0"></div><div><label>Issue Date</label><input id="issueDate" type="date"></div><div><label>Issued To / Department</label><input id="issueTo"></div><div><label>Remarks</label><input id="issueRemarks"></div></div><div class="actions"><button class="btn" style="background:#7a3e9d" onclick="saveIssue()">Issue & Reduce Stock</button></div></div></section>
-<section id="stock" class="page"><h2>Stock</h2><div class="panel"><table><thead><tr><th>Code</th><th>Material</th><th>Unit</th><th>Current Stock</th><th>Minimum</th><th>Status</th><th>Action</th></tr></thead><tbody id="astock"></tbody></table></div></section><section id="issued" class="page"><h2>Issued Items</h2><div class="panel"><table><thead><tr><th>Issue Date</th><th>Material</th><th>Qty.</th><th>Unit</th><th>Issued To</th><th>Remarks</th><th>User</th></tr></thead><tbody id="aissued"></tbody></table></div></section>
+<div class="panel">
 
-<section id="sup" class="page"><h2>Suppliers</h2><div class="panel"><div class="grid"><div><label>Supplier Name</label><input id="sname"></div><div><label>Contact</label><input id="scontact"></div><div><label>Phone</label><input id="sphone"></div><div><label>Email</label><input id="semail" type="email"></div></div><div class="actions"><button class="btn" onclick="addSupplier()">Save Supplier</button></div></div><div class="panel"><table><thead><tr><th>Supplier</th><th>Contact</th><th>Phone</th><th>Email</th></tr></thead><tbody id="asup"></tbody></table></div></section>
+<h3>Purchase Request File</h3>
 
-<section id="reports" class="page"><h2>Reports</h2>
-<div class="cards"><div class="card muted">Purchase Value<div class="num" id="rv">₹ 0</div></div><div class="card muted">Suppliers<div class="num" id="rs">0</div></div></div>
-<div class="panel"><h3>Company Heading</h3><div class="grid">
-<div><label>Company Name</label><input id="cname" value="BML Parenteral Drugs"></div>
-<div><label>Company Address</label><input id="caddress" value="Raipur Bhagwanpur Roorkee (Ukh)-247661"></div>
-</div><div class="actions"><button class="btn" onclick="saveCompany()">Save Heading</button><button class="btn" onclick="report()">Export CSV Report</button></div></div></section>
-</div></main></div>
+<div class="actions" style="align-items:end">
+
+<div style="min-width:260px">
+<label>Indent No.</label>
+<select id="printIndent">
+<option value="">Select Indent No.</option>
+</select>
+</div>
+
+<button class="btn" onclick="printSelectedIndent()">Print Same Indent Together</button>
+
+</div>
+
+<div class="muted" style="margin-top:8px">
+Same Indent No. ke sabhi SR.No ek hi print me saath aayenge.
+</div>
+
+<table>
+<thead>
+<tr>
+<th>SR.No</th>
+<th>Indent No.</th>
+<th>Date</th>
+<th>Department</th>
+<th>Item Name / Spec.</th>
+<th>Qty.</th>
+<th>Delivery</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="aprfile"></tbody>
+</table>
+
+</div>
+
+</section>
+
+
+<section id="po" class="page">
+
+<h2>Purchase Orders</h2>
+
+<div class="panel">
+
+<div class="grid">
+
+<div>
+<label>Supplier</label>
+<input id="supplier">
+</div>
+
+<div>
+<label>Material</label>
+<input id="pomaterial">
+</div>
+
+<div>
+<label>Quantity</label>
+<input id="poqty" type="number" min="0">
+</div>
+
+<div>
+<label>Unit</label>
+<select id="pounit">
+<option>Nos.</option>
+<option>KG</option>
+<option>Meter</option>
+<option>PKT</option>
+<option>Box</option>
+<option>Ltr</option>
+<option>gm</option>
+</select>
+</div>
+
+<div>
+<label>Rate</label>
+<input id="rate" type="number" min="0" step="0.01">
+</div>
+
+<div>
+<label>Discount (%)</label>
+<input id="discount" type="number" min="0" step="0.01" value="0" oninput="calcPOPreview()">
+</div>
+
+<div>
+<label>GST (%)</label>
+<input id="gst" type="number" min="0" step="0.01" value="18" oninput="calcPOPreview()">
+</div>
+
+<div>
+<label>Final Amount</label>
+<input id="finalAmount" readonly>
+</div>
+
+</div>
+
+<div class="muted" id="poCalc">
+Subtotal: ₹ 0.00 | Discount: ₹ 0.00 | GST: ₹ 0.00
+</div>
+
+<div class="actions">
+<button class="btn" id="savePOBtn" onclick="addPO()">Create Purchase Order</button>
+<button class="btn" id="cancelPOBtn" style="display:none;background:#667085" onclick="cancelPOEdit()">Cancel Edit</button>
+</div>
+
+</div>
+
+<div class="panel">
+
+<table>
+<thead>
+<tr>
+<th>PO</th>
+<th>Supplier</th>
+<th>Material</th>
+<th>Qty.</th>
+<th>Subtotal</th>
+<th>Discount</th>
+<th>GST</th>
+<th>Final Amount</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="apos"></tbody>
+</table>
+
+</div>
+
+</section>
+
+
+<section id="receive" class="page">
+
+<h2>Receive Material</h2>
+
+<div class="muted">
+Receive material against a Purchase Order. Received quantity is automatically added to Stock.
+</div>
+
+<div class="panel">
+
+<div class="grid">
+
+<div>
+<label>Purchase Order</label>
+<select id="receivePO" onchange="loadReceivePO()">
+<option value="">Select Purchase Order</option>
+</select>
+</div>
+
+<div>
+<label>Material</label>
+<input id="receiveMaterial" readonly>
+</div>
+
+<div>
+<label>Ordered Qty.</label>
+<input id="receiveOrdered" readonly>
+</div>
+
+<div>
+<label>Already Received</label>
+<input id="receiveAlready" readonly>
+</div>
+
+<div>
+<label>Receive Qty.</label>
+<input id="receiveQty" type="number" min="0">
+</div>
+
+<div>
+<label>Receive Date</label>
+<input id="receiveDate" type="date">
+</div>
+
+<div>
+<label>Remarks</label>
+<input id="receiveRemarks">
+</div>
+
+</div>
+
+<div class="actions">
+<button class="btn" onclick="saveReceipt()">Receive & Add to Stock</button>
+</div>
+
+</div>
+
+<div class="panel">
+
+<h3>Purchase Orders Pending / Partial Receipt</h3>
+
+<table>
+<thead>
+<tr>
+<th>PO</th>
+<th>Supplier</th>
+<th>Material</th>
+<th>Ordered</th>
+<th>Received</th>
+<th>Balance</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="areceive"></tbody>
+</table>
+
+</div>
+
+</section>
+
+
+<section id="issue" class="page">
+
+<h2>Issue Material</h2>
+
+<div class="muted">
+Issue material from Stock. Stock quantity is automatically reduced.
+</div>
+
+<div class="panel">
+
+<div class="grid">
+
+<div>
+<label>Material</label>
+<select id="issueMaterial" onchange="loadIssueStock()">
+<option value="">Select Material</option>
+</select>
+</div>
+
+<div>
+<label>Available Stock</label>
+<input id="issueAvailable" readonly>
+</div>
+
+<div>
+<label>Issue Qty.</label>
+<input id="issueQty" type="number" min="0">
+</div>
+
+<div>
+<label>Issue Date</label>
+<input id="issueDate" type="date">
+</div>
+
+<div>
+<label>Issued To / Department</label>
+<input id="issueTo">
+</div>
+
+<div>
+<label>Remarks</label>
+<input id="issueRemarks">
+</div>
+
+</div>
+
+<div class="actions">
+<button class="btn" style="background:#7a3e9d" onclick="saveIssue()">Issue & Reduce Stock</button>
+</div>
+
+</div>
+
+</section>
+
+
+<section id="stock" class="page">
+
+<h2>Stock</h2>
+
+<div class="panel">
+
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Material</th>
+<th>Unit</th>
+<th>Current Stock</th>
+<th>Minimum</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="astock"></tbody>
+</table>
+
+</div>
+
+</section>
+
+
+<section id="issued" class="page">
+
+<h2>Issued Items</h2>
+
+<div class="panel">
+
+<table>
+<thead>
+<tr>
+<th>Issue Date</th>
+<th>Material</th>
+<th>Qty.</th>
+<th>Unit</th>
+<th>Issued To</th>
+<th>Remarks</th>
+<th>User</th>
+</tr>
+</thead>
+<tbody id="aissued"></tbody>
+</table>
+
+</div>
+
+</section>
+
+
+<section id="sup" class="page">
+
+<h2>Suppliers</h2>
+
+<div class="panel">
+
+<div class="grid">
+
+<div>
+<label>Supplier Name</label>
+<input id="sname">
+</div>
+
+<div>
+<label>Contact</label>
+<input id="scontact">
+</div>
+
+<div>
+<label>Phone</label>
+<input id="sphone">
+</div>
+
+<div>
+<label>Email</label>
+<input id="semail" type="email">
+</div>
+
+</div>
+
+<div class="actions">
+<button class="btn" onclick="addSupplier()">Save Supplier</button>
+</div>
+
+</div>
+
+<div class="panel">
+
+<table>
+<thead>
+<tr>
+<th>Supplier</th>
+<th>Contact</th>
+<th>Phone</th>
+<th>Email</th>
+</tr>
+</thead>
+<tbody id="asup"></tbody>
+</table>
+
+</div>
+
+</section>
+
+
+<section id="reports" class="page">
+
+<h2>Reports</h2>
+
+<div class="cards">
+
+<div class="card muted">
+Purchase Value
+<div class="num" id="rv">₹ 0</div>
+</div>
+
+<div class="card muted">
+Suppliers
+<div class="num" id="rs">0</div>
+</div>
+
+</div>
+
+<div class="panel">
+
+<h3>Company Heading</h3>
+
+<div class="grid">
+
+<div>
+<label>Company Name</label>
+<input id="cname" value="BML Parenteral Drugs">
+</div>
+
+<div>
+<label>Company Address</label>
+<input id="caddress" value="Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661">
+</div>
+
+</div>
+
+<div class="actions">
+<button class="btn" onclick="saveCompany()">Save Heading</button>
+<button class="btn" onclick="report()">Export CSV Report</button>
+</div>
+
+</div>
+
+</section>
+
+</div>
+</main>
+</div>
+
+
+<div id="updateStatus"></div>
+
+
 <script>
-const DATA_VERSION='2.0';
-let D=JSON.parse(localStorage.getItem('engistore')||'{\"prs\":[],\"pos\":[],\"sup\":[],\"stock\":[],\"issued\":[],\"version\":\"1.8\"}');
-// Clear only old demo/testing stock data when upgrading to this build.
-if(D.version!==DATA_VERSION){ D.version=DATA_VERSION; localStorage.setItem('engistore',JSON.stringify(D)); }
-if(!Array.isArray(D.stock))D.stock=[]; if(!Array.isArray(D.issued))D.issued=[]; if(!Array.isArray(D.prs))D.prs=[]; if(!Array.isArray(D.pos))D.pos=[]; if(!Array.isArray(D.sup))D.sup=[];
-const save=()=>{localStorage.setItem('engistore',JSON.stringify(D));refresh()};
-function signin(){if(u.value==='admin'&&p.value==='admin'){login.style.display='none';app.style.display='flex';refresh()}else alert('Invalid login')}
-function show(id,b){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(b)b.classList.add('active');title.textContent={dashboard:'Dashboard',pr:'Purchase Request',po:'Purchase Orders',receive:'Receive Material',stock:'Stock',issue:'Issue Material',sup:'Suppliers',reports:'Reports',issued:'Issued Items'}[id];refresh()}
-let editingPRIndex = -1;
+
+'use strict';
+
+const DATA_VERSION='2.3.0';
+
+let D=JSON.parse(
+ localStorage.getItem('engistore') ||
+ '{"prs":[],"pos":[],"sup":[],"stock":[],"issued":[],"version":"2.3.0"}'
+);
+
+if(!Array.isArray(D.prs))D.prs=[];
+if(!Array.isArray(D.pos))D.pos=[];
+if(!Array.isArray(D.sup))D.sup=[];
+if(!Array.isArray(D.stock))D.stock=[];
+if(!Array.isArray(D.issued))D.issued[];
+
+if(!D.version)D.version=DATA_VERSION;
+
+function save(){
+ localStorage.setItem('engistore',JSON.stringify(D));
+ refresh();
+}
+
+
+function signin(){
+
+ const username=document.getElementById('u').value.trim();
+ const password=document.getElementById('p').value;
+
+ if(username==='admin' && password==='admin'){
+
+   document.getElementById('login').style.display='none';
+   document.getElementById('app').style.display='flex';
+
+   refresh();
+
+ }else{
+
+   alert('Invalid Username or Password');
+
+ }
+
+}
+
+
+document.getElementById('p').addEventListener('keydown',function(e){
+ if(e.key==='Enter')signin();
+});
+
+
+function show(id,b){
+
+ document.querySelectorAll('.page')
+ .forEach(x=>x.classList.remove('active'));
+
+ const page=document.getElementById(id);
+
+ if(page)page.classList.add('active');
+
+ document.querySelectorAll('.nav button')
+ .forEach(x=>x.classList.remove('active'));
+
+ if(b)b.classList.add('active');
+
+ const titles={
+ dashboard:'Dashboard',
+ pr:'Purchase Request',
+ po:'Purchase Orders',
+ receive:'Receive Material',
+ stock:'Stock',
+ issue:'Issue Material',
+ issued:'Issued Items',
+ sup:'Suppliers',
+ reports:'Reports'
+ };
+
+ document.getElementById('title').textContent=titles[id]||id;
+
+ refresh();
+}
+
+
+let editingPRIndex=-1;
+
 
 function normalizeSR(){
+
  const groups={};
+
  D.prs.forEach(x=>{
+
    const k=String(x.indent||'').trim().toLowerCase();
-   if(!groups[k]) groups[k]=0;
+
+   if(!groups[k])groups[k]=0;
+
    x.id=++groups[k];
+
  });
+
 }
+
 
 function clearPRForm(){
- indentNo.value=D.prs.length ? (D.prs[D.prs.length-1].indent||'') : ''; rspec.value=''; rqty.value=''; runit.value='Nos.';
- delivery.value='Standard'; rdate.value=''; remarks.value='';
+
+ document.getElementById('indentNo').value=
+ D.prs.length ? (D.prs[D.prs.length-1].indent||'') : '';
+
+ document.getElementById('rspec').value='';
+ document.getElementById('rqty').value='';
+ document.getElementById('runit').value='Nos.';
+ document.getElementById('delivery').value='Standard';
+ document.getElementById('rdate').value='';
+ document.getElementById('remarks').value='';
+
  editingPRIndex=-1;
- savePRBtn.textContent='Save Purchase Request';
- cancelEditBtn.style.display='none';
+
+ document.getElementById('savePRBtn').textContent='Save Purchase Request';
+ document.getElementById('cancelEditBtn').style.display='none';
 }
 
-function addPR(){
- if(!indentNo.value.trim()||!rspec.value||!rqty.value)
-   return alert('Indent No., Material Specification and Quantity are required');
 
- const indent=indentNo.value.trim();
+function addPR(){
+
+ const indent=document.getElementById('indentNo').value.trim();
+ const spec=document.getElementById('rspec').value.trim();
+ const qty=document.getElementById('rqty').value;
+
+ if(!indent||!spec||!qty)
+ return alert('Indent No., Material Specification and Quantity are required');
+
  if(editingPRIndex>=0){
+
    const x=D.prs[editingPRIndex];
+
    x.indent=indent;
-   x.dept=dept.value;
-   x.spec=rspec.value;
-   x.qty=+rqty.value;
-   x.unit=runit.value||'Nos';
-   x.delivery=delivery.value;
-   x.required=rdate.value;
-   x.remarks=remarks.value;
-   x.status='Created';
+   x.dept=document.getElementById('dept').value;
+   x.spec=spec;
+   x.qty=+qty;
+   x.unit=document.getElementById('runit').value;
+   x.delivery=document.getElementById('delivery').value;
+   x.required=document.getElementById('rdate').value;
+   x.remarks=document.getElementById('remarks').value;
+
    normalizeSR();
    save();
    clearPRForm();
+
    alert('Purchase Request updated successfully.');
+
    return;
  }
 
  const x={
-   id:0, indent:indent, date:new Date().toLocaleDateString('en-IN'),
-   dept:dept.value, spec:rspec.value, qty:+rqty.value,
-   unit:runit.value||'Nos', delivery:delivery.value, required:rdate.value,
-   remarks:remarks.value, status:'Created'
+   id:0,
+   indent:indent,
+   date:new Date().toLocaleDateString('en-IN'),
+   dept:document.getElementById('dept').value,
+   spec:spec,
+   qty:+qty,
+   unit:document.getElementById('runit').value,
+   delivery:document.getElementById('delivery').value,
+   required:document.getElementById('rdate').value,
+   remarks:document.getElementById('remarks').value,
+   status:'Created'
  };
+
  D.prs.push(x);
+
  normalizeSR();
+
  save();
- const saved=D.prs[D.prs.length-1];
+
  clearPRForm();
- alert('Purchase Request saved. SR.No: '+saved.id+' under Indent No.: '+saved.indent);
+
+ alert('Purchase Request saved. SR.No: '+x.id);
+
 }
+
 
 function editPR(i){
- const x=D.prs[i]; if(!x)return;
- indentNo.value=x.indent||''; dept.value=x.dept||'Engineering';
- rspec.value=x.spec||''; rqty.value=x.qty||''; runit.value=x.unit||'Nos';
- delivery.value=x.delivery||'Standard'; rdate.value=x.required||''; remarks.value=x.remarks||'';
+
+ const x=D.prs[i];
+
+ if(!x)return;
+
+ document.getElementById('indentNo').value=x.indent||'';
+ document.getElementById('dept').value=x.dept||'Engineering';
+ document.getElementById('rspec').value=x.spec||'';
+ document.getElementById('rqty').value=x.qty||'';
+ document.getElementById('runit').value=x.unit||'Nos.';
+ document.getElementById('delivery').value=x.delivery||'Standard';
+ document.getElementById('rdate').value=x.required||'';
+ document.getElementById('remarks').value=x.remarks||'';
+
  editingPRIndex=i;
- savePRBtn.textContent='Update Purchase Request';
- cancelEditBtn.style.display='inline-block';
+
+ document.getElementById('savePRBtn').textContent='Update Purchase Request';
+ document.getElementById('cancelEditBtn').style.display='inline-block';
+
  show('pr');
- window.scrollTo({top:0,behavior:'smooth'});
+
 }
 
-function cancelEdit(){ clearPRForm(); }
+
+function cancelEdit(){
+ clearPRForm();
+}
+
 
 function deletePR(i){
- const x=D.prs[i]; if(!x)return;
+
+ const x=D.prs[i];
+
+ if(!x)return;
+
  if(!confirm('Delete SR.No. '+x.id+' from Indent No. '+x.indent+'?'))return;
+
  D.prs.splice(i,1);
+
  normalizeSR();
+
  save();
+
 }
 
+
+function escapeHTML(value){
+
+ return String(value??'')
+ .replace(/&/g,'&amp;')
+ .replace(/</g,'&lt;')
+ .replace(/>/g,'&gt;')
+ .replace(/"/g,'&quot;')
+ .replace(/'/g,'&#039;');
+
+}
+
+
 function printPR(x){
+
  const cname=localStorage.getItem('companyName')||'BML Parenteral Drugs';
- const caddress=localStorage.getItem('companyAddress')||'Raipur Bhagwanpur Roorkee (Ukh)-247661';
+ const caddress=localStorage.getItem('companyAddress')||'Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661';
+
  const w=window.open('','_blank','width=900,height=700');
- w.document.write(`<html><head><title>Purchase Requisition Slip - Indent ${x.indent||''}</title><style>
- body{font-family:Arial;padding:35px;color:#111}.company{text-align:center;margin-bottom:8px}.company b{font-size:21px}.company span{display:block;font-size:12px;margin-top:4px}
- .title{text-align:center;font-size:18px;font-weight:700;margin:14px 0 8px;border-bottom:1px solid #111;padding-bottom:8px}
- .meta{display:flex;justify-content:space-between;font-size:13px;margin:10px 0 16px}.meta span{width:48%}
- table{width:100%;border-collapse:collapse;margin-top:5px}td,th{border:1px solid #333;padding:9px;text-align:left;font-size:12px}th{background:#f2f2f2}
- .sign{margin-top:75px;display:flex;justify-content:space-between;font-size:12px}
- </style></head><body>
- <div class="company"><b>${cname}</b><span>${caddress}</span></div>
- <div class="title">PURCHASE REQUISITION SLIP</div>
- <div class="meta"><span><b>Indent No.:</b> ${x.indent||''}</span><span style="text-align:right"><b>Date:</b> ${x.date||''}</span></div>
- <table><tr><th>SR.No.</th><th>Item Name / Spec.</th><th>Qty.</th><th>Purpose</th></tr>
- <tr><td>${x.id}</td><td>${x.spec}</td><td>${x.qty} ${x.unit}</td><td>${x.remarks||''}</td></tr></table>
- <div class="sign"><span>Requested By: __________________</span><span>Approved By: __________________</span></div>
- <div style="margin-top:28px;text-align:center"><button onclick="window.print()" style="padding:9px 18px;font-weight:700">PRINT</button></div>
- 
-<div id="updateStatus" style="display:none;position:fixed;right:22px;bottom:22px;background:#12233f;color:#fff;padding:14px 18px;border-radius:10px;box-shadow:0 8px 30px #0003;z-index:9999;max-width:360px;font-size:13px"></div>
-<script>
-function showUpdate(msg,button){var e=document.getElementById('updateStatus');e.innerHTML=msg+(button||'');e.style.display='block';}
-function checkForUpdate(){if(!window.engistoreUpdate){alert('Update service is not available in this build.');return;}showUpdate('Checking for update...');window.engistoreUpdate.check().then(function(r){if(r&&r.error)showUpdate('Update check failed: '+r.error);});}
-if(window.engistoreUpdate){window.engistoreUpdate.onStatus(function(x){
- if(x.type==='checking')showUpdate('Checking for update...');
- else if(x.type==='none'){showUpdate('You are using the latest version.');setTimeout(function(){document.getElementById('updateStatus').style.display='none';},3500);}
- else if(x.type==='available')showUpdate('New version '+x.version+' is available. Downloading...');
- else if(x.type==='progress')showUpdate('Downloading update: '+x.percent+'%');
- else if(x.type==='downloaded')showUpdate('Update '+x.version+' is ready. <button class="btn" onclick="window.engistoreUpdate.install()" style="margin-left:8px">Install & Restart</button>');
- else if(x.type==='error')showUpdate('Update error: '+x.message);
- });}
-</script>
-</body></html>`);w.document.close()
-}
-function printSelectedIndent(){
- const ind=String(printIndent.value||'').trim();
- if(!ind)return alert('Select an Indent No.');
- const rows=D.prs.filter(x=>String(x.indent||'').trim()===ind).sort((a,b)=>(+a.id)-(+b.id));
- if(!rows.length)return alert('No Purchase Request found for this Indent No.');
- const cname=localStorage.getItem('companyName')||'BML Parenteral Drugs';
- const caddress=localStorage.getItem('companyAddress')||'Raipur Bhagwanpur Roorkee (Ukh)-247661';
- const w=window.open('','_blank','width=1000,height=750');
- let body=rows.map(x=>`<tr><td>${x.id}</td><td>${x.spec}</td><td>${x.qty} ${x.unit}</td><td>${x.remarks||''}</td></tr>`).join('');
- w.document.write(`<html><head><title>Purchase Requisition Slip - Indent ${ind}</title><style>
- body{font-family:Arial;padding:30px;color:#111}.company{text-align:center;margin-bottom:8px}.company b{font-size:21px}.company span{display:block;font-size:12px;margin-top:4px}
- .title{text-align:center;font-size:18px;font-weight:700;margin:14px 0 8px;border-bottom:1px solid #111;padding-bottom:8px}
- .meta{display:flex;justify-content:space-between;font-size:13px;margin:10px 0 16px}.meta span{width:48%}
- table{width:100%;border-collapse:collapse;margin-top:5px}td,th{border:1px solid #333;padding:8px;font-size:12px}th{background:#f2f2f2}
- .sign{margin-top:70px;display:flex;justify-content:space-between;font-size:12px}
- </style></head><body>
- <div class="company"><b>${cname}</b><span>${caddress}</span></div>
- <div class="title">PURCHASE REQUISITION SLIP</div>
- <div class="meta"><span><b>Indent No.:</b> ${ind}</span><span style="text-align:right"><b>Date:</b> ${rows[0].date||''}</span></div>
- <table><tr><th>SR.No.</th><th>Item Name / Spec.</th><th>Qty.</th><th>Purpose</th></tr>${body}</table>
- <div class="sign"><span>Requested By: __________________</span><span>Approved By: __________________</span></div>
- <div style="margin-top:28px;text-align:center"><button onclick="window.print()" style="padding:9px 18px;font-weight:700">PRINT</button></div>
- 
-<div id="updateStatus" style="display:none;position:fixed;right:22px;bottom:22px;background:#12233f;color:#fff;padding:14px 18px;border-radius:10px;box-shadow:0 8px 30px #0003;z-index:9999;max-width:360px;font-size:13px"></div>
-<script>
-function showUpdate(msg,button){var e=document.getElementById('updateStatus');e.innerHTML=msg+(button||'');e.style.display='block';}
-function checkForUpdate(){if(!window.engistoreUpdate){alert('Update service is not available in this build.');return;}showUpdate('Checking for update...');window.engistoreUpdate.check().then(function(r){if(r&&r.error)showUpdate('Update check failed: '+r.error);});}
-if(window.engistoreUpdate){window.engistoreUpdate.onStatus(function(x){
- if(x.type==='checking')showUpdate('Checking for update...');
- else if(x.type==='none'){showUpdate('You are using the latest version.');setTimeout(function(){document.getElementById('updateStatus').style.display='none';},3500);}
- else if(x.type==='available')showUpdate('New version '+x.version+' is available. Downloading...');
- else if(x.type==='progress')showUpdate('Downloading update: '+x.percent+'%');
- else if(x.type==='downloaded')showUpdate('Update '+x.version+' is ready. <button class="btn" onclick="window.engistoreUpdate.install()" style="margin-left:8px">Install & Restart</button>');
- else if(x.type==='error')showUpdate('Update error: '+x.message);
- });}
-</script>
-</body></html>`);
+
+ if(!w)return alert('Please allow pop-ups for printing.');
+
+ w.document.write(`
+<html>
+<head>
+<title>Purchase Requisition Slip</title>
+<style>
+body{font-family:Arial;padding:35px;color:#111}
+.company{text-align:center}
+.company b{font-size:21px}
+.company span{display:block;font-size:12px;margin-top:4px}
+.title{text-align:center;font-size:18px;font-weight:700;margin:18px 0;border-bottom:1px solid #111;padding-bottom:8px}
+.meta{display:flex;justify-content:space-between;font-size:13px;margin:10px 0 16px}
+table{width:100%;border-collapse:collapse}
+td,th{border:1px solid #333;padding:9px;font-size:12px}
+th{background:#f2f2f2}
+.sign{margin-top:75px;display:flex;justify-content:space-between;font-size:12px}
+@media print{button{display:none}}
+</style>
+</head>
+<body>
+
+<div class="company">
+<b>${escapeHTML(cname)}</b>
+<span>${escapeHTML(caddress)}</span>
+</div>
+
+<div class="title">PURCHASE REQUISITION SLIP</div>
+
+<div class="meta">
+<span><b>Indent No.:</b> ${escapeHTML(x.indent)}</span>
+<span><b>Date:</b> ${escapeHTML(x.date)}</span>
+</div>
+
+<table>
+<tr>
+<th>SR.No.</th>
+<th>Item Name / Spec.</th>
+<th>Qty.</th>
+<th>Purpose</th>
+</tr>
+<tr>
+<td>${x.id}</td>
+<td>${escapeHTML(x.spec)}</td>
+<td>${escapeHTML(x.qty)} ${escapeHTML(x.unit)}</td>
+<td>${escapeHTML(x.remarks)}</td>
+</tr>
+</table>
+
+<div class="sign">
+<span>Requested By: __________________</span>
+<span>Approved By: __________________</span>
+</div>
+
+<div style="text-align:center;margin-top:30px">
+<button onclick="window.print()">PRINT</button>
+</div>
+
+</body>
+</html>
+`);
+
  w.document.close();
+
 }
-function printCurrentPR(){
- if(!D.prs.length)return alert('No Purchase Request available');
- printPR(D.prs[D.prs.length-1])
-}
-let editingPOIndex=-1;
-function poAmounts(q,r,disc,gst){
- const subtotal=(+q||0)*(+r||0), d=subtotal*(+disc||0)/100, taxable=Math.max(0,subtotal-d), g=taxable*(+gst||0)/100;
- return {subtotal,discountAmount:d,gstAmount:g,finalAmount:taxable+g};
-}
-function calcPOPreview(){
- const a=poAmounts(poqty.value,rate.value,discount.value,gst.value);
- finalAmount.value=a.finalAmount.toFixed(2);
- poCalc.textContent='Subtotal: ₹ '+a.subtotal.toFixed(2)+' | Discount: ₹ '+a.discountAmount.toFixed(2)+' | GST: ₹ '+a.gstAmount.toFixed(2);
-}
-function clearPOForm(){supplier.value='';pomaterial.value='';poqty.value='';pounit.value='Nos.';rate.value='';discount.value='0';gst.value='18';finalAmount.value='';poCalc.textContent='Subtotal: ₹ 0.00 | Discount: ₹ 0.00 | GST: ₹ 0.00';editingPOIndex=-1;savePOBtn.textContent='Create Purchase Order';cancelPOBtn.style.display='none'}
-function addPO(){
- if(!supplier.value||!pomaterial.value||!poqty.value)return alert('Fill supplier, material and quantity');
- const q=+poqty.value,r=+rate.value||0,d=+discount.value||0,g=+gst.value||0,a=poAmounts(q,r,d,g);
- if(editingPOIndex>=0){let x=D.pos[editingPOIndex];x.supplier=supplier.value;x.material=pomaterial.value;x.qty=q;x.unit=pounit.value;x.rate=r;x.subtotal=a.subtotal;x.discount=d;x.discountAmount=a.discountAmount;x.gst=g;x.gstAmount=a.gstAmount;x.total=a.finalAmount;save();clearPOForm();alert('Purchase Order updated successfully.');return}
- D.pos.push({id:'PO-'+String(D.pos.length+1).padStart(4,'0'),supplier:supplier.value,material:pomaterial.value,qty:q,unit:pounit.value,rate:r,subtotal:a.subtotal,discount:d,discountAmount:a.discountAmount,gst:g,gstAmount:a.gstAmount,total:a.finalAmount,status:'Approved',receivedQty:0,date:new Date().toLocaleDateString('en-IN')});save();clearPOForm();alert('Purchase Order created');
-}
-function printPO(x){
- const cname=localStorage.getItem('companyName')||'BML Parenteral Drugs', caddress=localStorage.getItem('companyAddress')||'Raipur Bhagwanpur Roorkee (Ukh)-247661';
- const a=poAmounts(x.qty,x.rate,x.discount,x.gst);
+
+
+function printSelectedIndent(){
+
+ const ind=document.getElementById('printIndent').value.trim();
+
+ if(!ind)return alert('Select an Indent No.');
+
+ const rows=D.prs
+ .filter(x=>String(x.indent||'').trim()===ind)
+ .sort((a,b)=>(+a.id)-(+b.id));
+
+ if(!rows.length)return alert('No Purchase Request found.');
+
+ const cname=localStorage.getItem('companyName')||'BML Parenteral Drugs';
+ const caddress=localStorage.getItem('companyAddress')||'Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661';
+
  const w=window.open('','_blank','width=1000,height=750');
- w.document.write(`<html><head><title>Purchase Order - ${x.id}</title><style>body{font-family:Arial;padding:32px;color:#111}.company{text-align:center}.company b{font-size:22px}.company span{display:block;font-size:12px;margin-top:4px}.title{text-align:center;font-size:19px;font-weight:700;margin:18px 0}.meta{display:flex;justify-content:space-between;margin:10px 0 18px;font-size:13px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #333;padding:9px;font-size:12px}th{background:#f2f2f2;text-align:left}.totals{margin-left:auto;width:340px;margin-top:15px}.totals div{display:flex;justify-content:space-between;padding:5px}.final{font-weight:700;border-top:2px solid #111;font-size:14px}.sign{margin-top:80px;display:flex;justify-content:space-between;font-size:12px}</style></head><body><div class="company"><b>${cname}</b><span>${caddress}</span></div><div class="title">PURCHASE ORDER</div><div class="meta"><span><b>PO No.:</b> ${x.id}</span><span><b>Date:</b> ${x.date||new Date().toLocaleDateString('en-IN')}</span></div><p><b>Supplier:</b> ${x.supplier}</p><table><tr><th>Sr.No.</th><th>Material</th><th>Qty.</th><th>Unit</th><th>Rate</th><th>Amount</th></tr><tr><td>1</td><td>${x.material}</td><td>${x.qty}</td><td>${x.unit||'Nos.'}</td><td>₹ ${(+x.rate||0).toFixed(2)}</td><td>₹ ${a.subtotal.toFixed(2)}</td></tr></table><div class="totals"><div><span>Subtotal</span><b>₹ ${a.subtotal.toFixed(2)}</b></div><div><span>Discount (${+x.discount||0}%)</span><b>- ₹ ${a.discountAmount.toFixed(2)}</b></div><div><span>GST (${+x.gst||0}%)</span><b>₹ ${a.gstAmount.toFixed(2)}</b></div><div class="final"><span>FINAL AMOUNT</span><b>₹ ${a.finalAmount.toFixed(2)}</b></div></div><div class="sign"><span>Prepared By: __________________</span><span>Approved By: __________________</span></div><div style="text-align:center;margin-top:25px"><button onclick="window.print()">PRINT</button></div>
-<div id="updateStatus" style="display:none;position:fixed;right:22px;bottom:22px;background:#12233f;color:#fff;padding:14px 18px;border-radius:10px;box-shadow:0 8px 30px #0003;z-index:9999;max-width:360px;font-size:13px"></div>
-<script>
-function showUpdate(msg,button){var e=document.getElementById('updateStatus');e.innerHTML=msg+(button||'');e.style.display='block';}
-function checkForUpdate(){if(!window.engistoreUpdate){alert('Update service is not available in this build.');return;}showUpdate('Checking for update...');window.engistoreUpdate.check().then(function(r){if(r&&r.error)showUpdate('Update check failed: '+r.error);});}
-if(window.engistoreUpdate){window.engistoreUpdate.onStatus(function(x){
- if(x.type==='checking')showUpdate('Checking for update...');
- else if(x.type==='none'){showUpdate('You are using the latest version.');setTimeout(function(){document.getElementById('updateStatus').style.display='none';},3500);}
- else if(x.type==='available')showUpdate('New version '+x.version+' is available. Downloading...');
- else if(x.type==='progress')showUpdate('Downloading update: '+x.percent+'%');
- else if(x.type==='downloaded')showUpdate('Update '+x.version+' is ready. <button class="btn" onclick="window.engistoreUpdate.install()" style="margin-left:8px">Install & Restart</button>');
- else if(x.type==='error')showUpdate('Update error: '+x.message);
- });}
-</script>
-</body></html>`);w.document.close();
+
+ if(!w)return alert('Please allow pop-ups for printing.');
+
+ const body=rows.map(x=>`
+<tr>
+<td>${x.id}</td>
+<td>${escapeHTML(x.spec)}</td>
+<td>${escapeHTML(x.qty)} ${escapeHTML(x.unit)}</td>
+<td>${escapeHTML(x.remarks)}</td>
+</tr>`).join('');
+
+ w.document.write(`
+<html>
+<head>
+<title>Purchase Requisition Slip</title>
+<style>
+body{font-family:Arial;padding:30px;color:#111}
+.company{text-align:center}
+.company b{font-size:21px}
+.company span{display:block;font-size:12px;margin-top:4px}
+.title{text-align:center;font-size:18px;font-weight:700;margin:18px 0;border-bottom:1px solid #111;padding-bottom:8px}
+.meta{display:flex;justify-content:space-between;font-size:13px;margin:10px 0 16px}
+table{width:100%;border-collapse:collapse}
+td,th{border:1px solid #333;padding:8px;font-size:12px}
+th{background:#f2f2f2}
+.sign{margin-top:70px;display:flex;justify-content:space-between;font-size:12px}
+@media print{button{display:none}}
+</style>
+</head>
+<body>
+
+<div class="company">
+<b>${escapeHTML(cname)}</b>
+<span>${escapeHTML(caddress)}</span>
+</div>
+
+<div class="title">PURCHASE REQUISITION SLIP</div>
+
+<div class="meta">
+<span><b>Indent No.:</b> ${escapeHTML(ind)}</span>
+<span><b>Date:</b> ${escapeHTML(rows[0].date||'')}</span>
+</div>
+
+<table>
+<tr>
+<th>SR.No.</th>
+<th>Item Name / Spec.</th>
+<th>Qty.</th>
+<th>Purpose</th>
+</tr>
+${body}
+</table>
+
+<div class="sign">
+<span>Requested By: __________________</span>
+<span>Approved By: __________________</span>
+</div>
+
+<div style="text-align:center;margin-top:30px">
+<button onclick="window.print()">PRINT</button>
+</div>
+
+</body>
+</html>
+`);
+
+ w.document.close();
+
 }
-function editPO(i){let x=D.pos[i];if(!x)return;supplier.value=x.supplier||'';pomaterial.value=x.material||'';poqty.value=x.qty||'';pounit.value=x.unit||'Nos.';rate.value=x.rate||0;discount.value=x.discount||0;gst.value=(x.gst===undefined?18:x.gst);editingPOIndex=i;calcPOPreview();savePOBtn.textContent='Update Purchase Order';cancelPOBtn.style.display='inline-block';show('po')}
-function cancelPOEdit(){clearPOForm()}
-function deletePO(i){let x=D.pos[i];if(!x)return;if(!confirm('Delete '+x.id+'?'))return;D.pos.splice(i,1);save()}
-function receivePO(i){let x=D.pos[i];if(!x)return;let remaining=Math.max(0,(+x.qty||0)-(+x.receivedQty||0));if(remaining<=0)return alert('This Purchase Order is already fully received.');let q=prompt('Receive quantity (remaining '+remaining+'):',remaining);if(q===null)return;q=+q;if(!q||q<0||q>remaining)return alert('Enter a valid receive quantity.');let idx=D.stock.findIndex(m=>m.name.toLowerCase()===String(x.material).toLowerCase());if(idx<0){D.stock.push({code:'MAT-'+String(D.stock.length+1).padStart(3,'0'),name:x.material,unit:x.unit||'Nos.',qty:q,min:0})}else D.stock[idx].qty=(+D.stock[idx].qty||0)+q;x.receivedQty=(+x.receivedQty||0)+q;x.status=x.receivedQty>=x.qty?'Received':'Partially Received';x.receiveDate=new Date().toLocaleDateString('en-IN');save();alert(q+' received and added to Stock.')}
-function issueStock(i){let x=D.stock[i];if(!x)return;let q=prompt('Issue quantity (available '+x.qty+'):',1);if(q===null)return;q=+q;if(!q||q<0||q>x.qty)return alert('Enter a valid quantity not greater than available stock.');let to=prompt('Issued To / Department:','');if(to===null)return;let rem=prompt('Remarks:','');if(rem===null)return;x.qty-=q;D.issued.push({date:new Date().toLocaleDateString('en-IN'),material:x.name,qty:q,unit:x.unit,to:to,remarks:rem,user:'admin'});save();alert('Item issued. Stock updated automatically.')}
-function addSupplier(){if(!sname.value)return alert('Enter supplier');D.sup.push({name:sname.value,contact:scontact.value,phone:sphone.value,email:semail.value});save();alert('Supplier saved')}
+
+
+function printCurrentPR(){
+
+ if(!D.prs.length)
+ return alert('No Purchase Request available');
+
+ printPR(D.prs[D.prs.length-1]);
+
+}
+
+
+let editingPOIndex=-1;
+
+
+function poAmounts(q,r,disc,gst){
+
+ const subtotal=(+q||0)*(+r||0);
+ const d=subtotal*(+disc||0)/100;
+ const taxable=Math.max(0,subtotal-d);
+ const g=taxable*(+gst||0)/100;
+
+ return{
+ subtotal,
+ discountAmount:d,
+ gstAmount:g,
+ finalAmount:taxable+g
+ };
+
+}
+
+
+function calcPOPreview(){
+
+ const a=poAmounts(
+ document.getElementById('poqty').value,
+ document.getElementById('rate').value,
+ document.getElementById('discount').value,
+ document.getElementById('gst').value
+ );
+
+ document.getElementById('finalAmount').value=a.finalAmount.toFixed(2);
+
+ document.getElementById('poCalc').textContent=
+ 'Subtotal: ₹ '+a.subtotal.toFixed(2)+
+ ' | Discount: ₹ '+a.discountAmount.toFixed(2)+
+ ' | GST: ₹ '+a.gstAmount.toFixed(2);
+
+}
+
+
+function clearPOForm(){
+
+ document.getElementById('supplier').value='';
+ document.getElementById('pomaterial').value='';
+ document.getElementById('poqty').value='';
+ document.getElementById('pounit').value='Nos.';
+ document.getElementById('rate').value='';
+ document.getElementById('discount').value='0';
+ document.getElementById('gst').value='18';
+ document.getElementById('finalAmount').value='';
+
+ editingPOIndex=-1;
+
+ document.getElementById('savePOBtn').textContent='Create Purchase Order';
+ document.getElementById('cancelPOBtn').style.display='none';
+
+ calcPOPreview();
+
+}
+
+
+function addPO(){
+
+ const supplier=document.getElementById('supplier').value.trim();
+ const material=document.getElementById('pomaterial').value.trim();
+ const qty=document.getElementById('poqty').value;
+
+ if(!supplier||!material||!qty)
+ return alert('Fill supplier, material and quantity');
+
+ const q=+qty;
+ const r=+document.getElementById('rate').value||0;
+ const d=+document.getElementById('discount').value||0;
+ const g=+document.getElementById('gst').value||0;
+
+ const a=poAmounts(q,r,d,g);
+
+ if(editingPOIndex>=0){
+
+   const x=D.pos[editingPOIndex];
+
+   x.supplier=supplier;
+   x.material=material;
+   x.qty=q;
+   x.unit=document.getElementById('pounit').value;
+   x.rate=r;
+   x.subtotal=a.subtotal;
+   x.discount=d;
+   x.discountAmount=a.discountAmount;
+   x.gst=g;
+   x.gstAmount=a.gstAmount;
+   x.total=a.finalAmount;
+
+   save();
+   clearPOForm();
+
+   alert('Purchase Order updated successfully.');
+
+   return;
+ }
+
+ D.pos.push({
+   id:'PO-'+String(D.pos.length+1).padStart(4,'0'),
+   supplier,
+   material,
+   qty:q,
+   unit:document.getElementById('pounit').value,
+   rate:r,
+   subtotal:a.subtotal,
+   discount:d,
+   discountAmount:a.discountAmount,
+   gst:g,
+   gstAmount:a.gstAmount,
+   total:a.finalAmount,
+   status:'Approved',
+   receivedQty:0,
+   date:new Date().toLocaleDateString('en-IN')
+ });
+
+ save();
+ clearPOForm();
+
+ alert('Purchase Order created.');
+
+}
+
+
+function editPO(i){
+
+ const x=D.pos[i];
+
+ if(!x)return;
+
+ document.getElementById('supplier').value=x.supplier||'';
+ document.getElementById('pomaterial').value=x.material||'';
+ document.getElementById('poqty').value=x.qty||'';
+ document.getElementById('pounit').value=x.unit||'Nos.';
+ document.getElementById('rate').value=x.rate||0;
+ document.getElementById('discount').value=x.discount||0;
+ document.getElementById('gst').value=x.gst===undefined?18:x.gst;
+
+ editingPOIndex=i;
+
+ calcPOPreview();
+
+ document.getElementById('savePOBtn').textContent='Update Purchase Order';
+ document.getElementById('cancelPOBtn').style.display='inline-block';
+
+ show('po');
+
+}
+
+
+function cancelPOEdit(){
+ clearPOForm();
+}
+
+
+function deletePO(i){
+
+ const x=D.pos[i];
+
+ if(!x)return;
+
+ if(!confirm('Delete '+x.id+'?'))return;
+
+ D.pos.splice(i,1);
+
+ save();
+
+}
+
+
+function printPO(x){
+
+ const cname=localStorage.getItem('companyName')||'BML Parenteral Drugs';
+ const caddress=localStorage.getItem('companyAddress')||'Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661';
+
+ const a=poAmounts(x.qty,x.rate,x.discount,x.gst);
+
+ const w=window.open('','_blank','width=1000,height=750');
+
+ if(!w)return alert('Please allow pop-ups for printing.');
+
+ w.document.write(`
+<html>
+<head>
+<title>Purchase Order</title>
+<style>
+body{font-family:Arial;padding:32px;color:#111}
+.company{text-align:center}
+.company b{font-size:22px}
+.company span{display:block;font-size:12px;margin-top:4px}
+.title{text-align:center;font-size:19px;font-weight:700;margin:18px 0}
+.meta{display:flex;justify-content:space-between;margin:10px 0 18px;font-size:13px}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #333;padding:9px;font-size:12px}
+th{background:#f2f2f2;text-align:left}
+.totals{margin-left:auto;width:340px;margin-top:15px}
+.totals div{display:flex;justify-content:space-between;padding:5px}
+.final{font-weight:700;border-top:2px solid #111;font-size:14px}
+.sign{margin-top:80px;display:flex;justify-content:space-between;font-size:12px}
+@media print{button{display:none}}
+</style>
+</head>
+<body>
+
+<div class="company">
+<b>${escapeHTML(cname)}</b>
+<span>${escapeHTML(caddress)}</span>
+</div>
+
+<div class="title">PURCHASE ORDER</div>
+
+<div class="meta">
+<span><b>PO No.:</b> ${escapeHTML(x.id)}</span>
+<span><b>Date:</b> ${escapeHTML(x.date)}</span>
+</div>
+
+<p><b>Supplier:</b> ${escapeHTML(x.supplier)}</p>
+
+<table>
+<tr>
+<th>Sr.No.</th>
+<th>Material</th>
+<th>Qty.</th>
+<th>Unit</th>
+<th>Rate</th>
+<th>Amount</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>${escapeHTML(x.material)}</td>
+<td>${x.qty}</td>
+<td>${escapeHTML(x.unit)}</td>
+<td>₹ ${(+x.rate||0).toFixed(2)}</td>
+<td>₹ ${a.subtotal.toFixed(2)}</td>
+</tr>
+</table>
+
+<div class="totals">
+<div><span>Subtotal</span><b>₹ ${a.subtotal.toFixed(2)}</b></div>
+<div><span>Discount (${+x.discount||0}%)</span><b>- ₹ ${a.discountAmount.toFixed(2)}</b></div>
+<div><span>GST (${+x.gst||0}%)</span><b>₹ ${a.gstAmount.toFixed(2)}</b></div>
+<div class="final"><span>FINAL AMOUNT</span><b>₹ ${a.finalAmount.toFixed(2)}</b></div>
+</div>
+
+<div class="sign">
+<span>Prepared By: __________________</span>
+<span>Approved By: __________________</span>
+</div>
+
+<div style="text-align:center;margin-top:25px">
+<button onclick="window.print()">PRINT</button>
+</div>
+
+</body>
+</html>
+`);
+
+ w.document.close();
+
+}
+
+
+function openReceive(i){
+
+ show('receive');
+
+ document.getElementById('receivePO').value=String(i);
+
+ loadReceivePO();
+
+}
+
+
+function loadReceivePO(){
+
+ const select=document.getElementById('receivePO');
+ const i=select.value;
+ const x=D.pos[i];
+
+ if(!x){
+
+   document.getElementById('receiveMaterial').value='';
+   document.getElementById('receiveOrdered').value='';
+   document.getElementById('receiveAlready').value='';
+   document.getElementById('receiveQty').value='';
+
+   return;
+ }
+
+ const remaining=Math.max(
+ 0,
+ (+x.qty||0)-(+x.receivedQty||0)
+ );
+
+ document.getElementById('receiveMaterial').value=x.material||'';
+ document.getElementById('receiveOrdered').value=x.qty||0;
+ document.getElementById('receiveAlready').value=x.receivedQty||0;
+ document.getElementById('receiveQty').value=remaining;
+
+}
+
+
+function saveReceipt(){
+
+ const i=+document.getElementById('receivePO').value;
+ const x=D.pos[i];
+
+ if(!x)return alert('Select a Purchase Order.');
+
+ const remaining=Math.max(
+ 0,
+ (+x.qty||0)-(+x.receivedQty||0)
+ );
+
+ const q=+document.getElementById('receiveQty').value;
+
+ if(!q||q<=0||q>remaining)
+ return alert('Enter a valid receive quantity. Remaining: '+remaining);
+
+ let idx=D.stock.findIndex(
+ m=>String(m.name).trim().toLowerCase()===
+ String(x.material).trim().toLowerCase()
+ );
+
+ if(idx<0){
+
+   D.stock.push({
+     code:'MAT-'+String(D.stock.length+1).padStart(3,'0'),
+     name:x.material,
+     unit:x.unit||'Nos.',
+     qty:q,
+     min:0
+   });
+
+ }else{
+
+   D.stock[idx].qty=(+D.stock[idx].qty||0)+q;
+
+ }
+
+ x.receivedQty=(+x.receivedQty||0)+q;
+
+ x.status=x.receivedQty>=x.qty?'Received':'Partially Received';
+
+ x.receiveDate=
+ document.getElementById('receiveDate').value||
+ new Date().toLocaleDateString('en-IN');
+
+ x.receiveRemarks=
+ document.getElementById('receiveRemarks').value||'';
+
+ save();
+
+ loadReceivePO();
+
+ alert(q+' '+x.material+' received. Stock increased automatically.');
+
+}
+
+
+function loadIssueStock(){
+
+ const i=+document.getElementById('issueMaterial').value;
+
+ const x=D.stock[i];
+
+ document.getElementById('issueAvailable').value=x?x.qty:0;
+
+}
+
+
+function saveIssue(){
+
+ const i=+document.getElementById('issueMaterial').value;
+ const x=D.stock[i];
+
+ if(!x)return alert('Select a material.');
+
+ const q=+document.getElementById('issueQty').value;
+
+ if(!q||q<=0||q>x.qty)
+ return alert('Enter a valid quantity. Available stock: '+x.qty);
+
+ const to=document.getElementById('issueTo').value.trim();
+
+ if(!to)return alert('Enter Issued To / Department.');
+
+ x.qty-=q;
+
+ D.issued.push({
+   date:document.getElementById('issueDate').value||
+   new Date().toLocaleDateString('en-IN'),
+   material:x.name,
+   qty:q,
+   unit:x.unit,
+   to:to,
+   remarks:document.getElementById('issueRemarks').value||'',
+   user:'admin'
+ });
+
+ save();
+
+ document.getElementById('issueQty').value='';
+ document.getElementById('issueTo').value='';
+ document.getElementById('issueRemarks').value='';
+
+ loadIssueStock();
+
+ alert(q+' '+x.name+' issued. Stock reduced automatically.');
+
+}
+
+
+function addSupplier(){
+
+ const name=document.getElementById('sname').value.trim();
+
+ if(!name)return alert('Enter supplier');
+
+ D.sup.push({
+   name:name,
+   contact:document.getElementById('scontact').value,
+   phone:document.getElementById('sphone').value,
+   email:document.getElementById('semail').value
+ });
+
+ save();
+
+ document.getElementById('sname').value='';
+ document.getElementById('scontact').value='';
+ document.getElementById('sphone').value='';
+ document.getElementById('semail').value='';
+
+ alert('Supplier saved');
+
+}
+
+
 function saveCompany(){
- const n=cname.value.trim()||'BML Parenteral Drugs', a=caddress.value.trim()||'Raipur Bhagwanpur Roorkee (Ukh)-247661';
- localStorage.setItem('companyName',n);localStorage.setItem('companyAddress',a);
- companyName.textContent=n;companyAddress.textContent=a;alert('Company heading saved.');
+
+ const n=document.getElementById('cname').value.trim()||
+ 'BML Parenteral Drugs';
+
+ const a=document.getElementById('caddress').value.trim()||
+ 'Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661';
+
+ localStorage.setItem('companyName',n);
+ localStorage.setItem('companyAddress',a);
+
+ document.getElementById('companyName').textContent=n;
+ document.getElementById('companyAddress').textContent=a;
+
+ alert('Company heading saved.');
+
 }
-function openReceive(i){show('receive');receivePO.value=String(i);loadReceivePO();}
-function loadReceivePO(){const i=+receivePO.value,x=D.pos[i];if(!x){receiveMaterial.value='';receiveOrdered.value='';receiveAlready.value='';receiveQty.value='';return;}receiveMaterial.value=x.material||'';receiveOrdered.value=x.qty||0;receiveAlready.value=x.receivedQty||0;receiveQty.value=Math.max(0,(+x.qty||0)-(+x.receivedQty||0));}
-function saveReceipt(){const i=+receivePO.value,x=D.pos[i];if(!x)return alert('Select a Purchase Order.');const remaining=Math.max(0,(+x.qty||0)-(+x.receivedQty||0)),q=+receiveQty.value;if(!q||q<=0||q>remaining)return alert('Enter a valid receive quantity. Remaining: '+remaining);let idx=D.stock.findIndex(m=>String(m.name).trim().toLowerCase()===String(x.material).trim().toLowerCase());if(idx<0)D.stock.push({code:'MAT-'+String(D.stock.length+1).padStart(3,'0'),name:x.material,unit:x.unit||'Nos.',qty:q,min:0});else D.stock[idx].qty=(+D.stock[idx].qty||0)+q;x.receivedQty=(+x.receivedQty||0)+q;x.status=x.receivedQty>=x.qty?'Received':'Partially Received';x.receiveDate=receiveDate.value||new Date().toLocaleDateString('en-IN');x.receiveRemarks=receiveRemarks.value||'';save();loadReceivePO();alert(q+' '+(x.material||'item')+' received. Stock increased automatically.');}
-function loadIssueStock(){const i=+issueMaterial.value,x=D.stock[i];issueAvailable.value=x?x.qty:0;}
-function saveIssue(){const i=+issueMaterial.value,x=D.stock[i];if(!x)return alert('Select a material.');const q=+issueQty.value;if(!q||q<=0||q>x.qty)return alert('Enter a valid quantity. Available stock: '+x.qty);const to=issueTo.value.trim();if(!to)return alert('Enter Issued To / Department.');x.qty-=q;D.issued.push({date:issueDate.value||new Date().toLocaleDateString('en-IN'),material:x.name,qty:q,unit:x.unit,to:to,remarks:issueRemarks.value||'',user:'admin'});save();issueQty.value='';issueTo.value='';issueRemarks.value='';loadIssueStock();alert(q+' '+x.name+' issued. Stock reduced automatically.');}
+
+
 function refresh(){
- companyName.textContent=localStorage.getItem('companyName')||'BML Parenteral Drugs'; companyAddress.textContent=localStorage.getItem('companyAddress')||'Raipur Bhagwanpur Roorkee (Ukh)-247661';
- if(typeof cname!=='undefined'){cname.value=localStorage.getItem('companyName')||'BML Parenteral Drugs';caddress.value=localStorage.getItem('companyAddress')||'Raipur Bhagwanpur Roorkee (Ukh)-247661'}
- mpr.textContent=D.prs.length;mpo.textContent=D.pos.length;mls.textContent=D.stock.filter(x=>x.qty<=x.min).length;msup.textContent=D.sup.length;
- aprfile.innerHTML=D.prs.map((x,i)=>`<tr><td>${x.id}</td><td>${x.indent||''}</td><td>${x.date}</td><td>${x.dept}</td><td>${x.spec}</td><td>${x.qty} ${x.unit}</td><td><span class="badge ${x.delivery==='Most Urgent'?'low':''}">${x.delivery}</span></td><td><div style="display:flex;gap:5px"><button class="btn" onclick='editPR(${i})'>Edit</button><button class="btn" style="background:#b42318" onclick='deletePR(${i})'>Delete</button><button class="btn" onclick='printPR(${JSON.stringify(x)})'>Print</button></div></td></tr>`).join('');
- const inds=[...new Set(D.prs.map(x=>String(x.indent||'').trim()).filter(Boolean))];
- printIndent.innerHTML='<option value="">Select Indent No.</option>'+inds.map(i=>`<option value="${i}">${i}</option>`).join('');
- apos.innerHTML=D.pos.map((x,i)=>{const a=poAmounts(x.qty,x.rate,x.discount,x.gst===undefined?18:x.gst);return `<tr><td>${x.id}</td><td>${x.supplier}</td><td>${x.material}</td><td>${x.qty} ${x.unit||''}</td><td>₹ ${a.subtotal.toFixed(2)}</td><td>₹ ${a.discountAmount.toFixed(2)}</td><td>₹ ${a.gstAmount.toFixed(2)}</td><td><b>₹ ${a.finalAmount.toFixed(2)}</b></td><td><span class="badge">${x.status||'Approved'}</span></td><td><div style="display:flex;gap:5px;flex-wrap:wrap"><button class="btn" onclick="editPO(${i})">Edit</button><button class="btn" style="background:#b42318" onclick="deletePO(${i})">Delete</button><button class="btn" style="background:#18794e" onclick="openReceive(${i})">Receive</button><button class="btn" onclick="printPO(D.pos[${i}])">Print</button></div></td></tr>`}).join('');
- receivePO.innerHTML='<option value=\"\">Select Purchase Order</option>'+D.pos.map((x,i)=>{const bal=Math.max(0,(+x.qty||0)-(+x.receivedQty||0));return bal>0?`<option value=\"${i}\">${x.id} - ${x.material} (Balance: ${bal})</option>`:''}).join('');
- areceive.innerHTML=D.pos.map(x=>{const rec=+x.receivedQty||0,bal=Math.max(0,(+x.qty||0)-rec);return `<tr><td>${x.id}</td><td>${x.supplier}</td><td>${x.material}</td><td>${x.qty}</td><td>${rec}</td><td>${bal}</td><td><span class=\"badge\">${x.status||'Approved'}</span></td></tr>`}).join('');
- issueMaterial.innerHTML='<option value=\"\">Select Material</option>'+D.stock.map((x,i)=>`<option value=\"${i}\">${x.name} (Available: ${x.qty} ${x.unit})</option>`).join(''); loadIssueStock();
- astock.innerHTML=D.stock.map((x,i)=>`<tr><td>${x.code}</td><td>${x.name}</td><td>${x.unit}</td><td>${x.qty}</td><td>${x.min}</td><td><span class="badge ${x.qty<=x.min?'low':''}">${x.qty<=x.min?'LOW STOCK':'OK'}</span></td><td><button class="btn" style="background:#7a3e9d" onclick="issueStock(${i})">Issue</button></td></tr>`).join('');
- asup.innerHTML=D.sup.map(x=>`<tr><td>${x.name}</td><td>${x.contact}</td><td>${x.phone}</td><td>${x.email}</td></tr>`).join('');aissued.innerHTML=D.issued.map(x=>`<tr><td>${x.date}</td><td>${x.material}</td><td>${x.qty}</td><td>${x.unit}</td><td>${x.to}</td><td>${x.remarks||''}</td><td>${x.user||''}</td></tr>`).join('');missued.textContent=D.issued.length;
- rv.textContent='₹ '+D.pos.reduce((a,x)=>a+x.total,0).toFixed(2);rs.textContent=D.sup.length;
+
+ document.getElementById('companyName').textContent=
+ localStorage.getItem('companyName')||
+ 'BML Parenteral Drugs';
+
+ document.getElementById('companyAddress').textContent=
+ localStorage.getItem('companyAddress')||
+ 'Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661';
+
+ document.getElementById('mpr').textContent=D.prs.length;
+ document.getElementById('mpo').textContent=D.pos.length;
+
+ document.getElementById('mls').textContent=
+ D.stock.filter(x=>(+x.qty||0)<=(+x.min||0)).length;
+
+ document.getElementById('msup').textContent=D.sup.length;
+ document.getElementById('missued').textContent=D.issued.length;
+
+
+ document.getElementById('aprfile').innerHTML=
+ D.prs.map((x,i)=>`
+
+<tr>
+<td>${x.id}</td>
+<td>${escapeHTML(x.indent)}</td>
+<td>${escapeHTML(x.date)}</td>
+<td>${escapeHTML(x.dept)}</td>
+<td>${escapeHTML(x.spec)}</td>
+<td>${x.qty} ${escapeHTML(x.unit)}</td>
+<td>
+<span class="badge ${x.delivery==='Most Urgent'?'low':''}">
+${escapeHTML(x.delivery)}
+</span>
+</td>
+
+<td>
+
+<button class="btn" onclick="editPR(${i})">Edit</button>
+
+<button class="btn" style="background:#b42318"
+onclick="deletePR(${i})">Delete</button>
+
+<button class="btn"
+onclick="printPR(D.prs[${i}])">Print</button>
+
+</td>
+</tr>
+
+`).join('');
+
+
+ const inds=[
+ ...new Set(
+ D.prs.map(x=>String(x.indent||'').trim()).filter(Boolean)
+ )
+ ];
+
+ document.getElementById('printIndent').innerHTML=
+ '<option value="">Select Indent No.</option>'+
+ inds.map(i=>`<option value="${escapeHTML(i)}">${escapeHTML(i)}</option>`).join('');
+
+
+ document.getElementById('apos').innerHTML=
+ D.pos.map((x,i)=>{
+
+ const a=poAmounts(
+ x.qty,x.rate,x.discount,
+ x.gst===undefined?18:x.gst
+ );
+
+ return`
+
+<tr>
+
+<td>${escapeHTML(x.id)}</td>
+<td>${escapeHTML(x.supplier)}</td>
+<td>${escapeHTML(x.material)}</td>
+<td>${x.qty} ${escapeHTML(x.unit||'')}</td>
+<td>₹ ${a.subtotal.toFixed(2)}</td>
+<td>₹ ${a.discountAmount.toFixed(2)}</td>
+<td>₹ ${a.gstAmount.toFixed(2)}</td>
+<td><b>₹ ${a.finalAmount.toFixed(2)}</b></td>
+
+<td>
+<span class="badge">${escapeHTML(x.status||'Approved')}</span>
+</td>
+
+<td>
+
+<button class="btn" onclick="editPO(${i})">Edit</button>
+
+<button class="btn" style="background:#b42318"
+onclick="deletePO(${i})">Delete</button>
+
+<button class="btn" style="background:#18794e"
+onclick="openReceive(${i})">Receive</button>
+
+<button class="btn"
+onclick="printPO(D.pos[${i}])">Print</button>
+
+</td>
+
+</tr>
+
+`;
+
+ }).join('');
+
+
+ document.getElementById('receivePO').innerHTML=
+ '<option value="">Select Purchase Order</option>'+
+ D.pos.map((x,i)=>{
+
+ const bal=Math.max(
+ 0,(+x.qty||0)-(+x.receivedQty||0)
+ );
+
+ return bal>0?
+ `<option value="${i}">
+ ${escapeHTML(x.id)} - ${escapeHTML(x.material)}
+ (Balance: ${bal})
+ </option>`:'';
+
+ }).join('');
+
+
+ document.getElementById('areceive').innerHTML=
+ D.pos.map(x=>{
+
+ const rec=+x.receivedQty||0;
+ const bal=Math.max(0,(+x.qty||0)-rec);
+
+ return`
+
+<tr>
+<td>${escapeHTML(x.id)}</td>
+<td>${escapeHTML(x.supplier)}</td>
+<td>${escapeHTML(x.material)}</td>
+<td>${x.qty}</td>
+<td>${rec}</td>
+<td>${bal}</td>
+<td>
+<span class="badge">${escapeHTML(x.status||'Approved')}</span>
+</td>
+</tr>
+
+`;
+
+ }).join('');
+
+
+ document.getElementById('issueMaterial').innerHTML=
+ '<option value="">Select Material</option>'+
+ D.stock.map((x,i)=>
+ `<option value="${i}">
+ ${escapeHTML(x.name)} (Available: ${x.qty} ${escapeHTML(x.unit)})
+ </option>`
+ ).join('');
+
+
+ document.getElementById('astock').innerHTML=
+ D.stock.map((x,i)=>`
+
+<tr>
+
+<td>${escapeHTML(x.code)}</td>
+<td>${escapeHTML(x.name)}</td>
+<td>${escapeHTML(x.unit)}</td>
+<td>${x.qty}</td>
+<td>${x.min}</td>
+
+<td>
+<span class="badge ${x.qty<=x.min?'low':''}">
+${x.qty<=x.min?'LOW STOCK':'OK'}
+</span>
+</td>
+
+<td>
+<button class="btn"
+style="background:#7a3e9d"
+onclick="issueStock(${i})">Issue</button>
+</td>
+
+</tr>
+
+`).join('');
+
+
+ document.getElementById('asup').innerHTML=
+ D.sup.map(x=>`
+
+<tr>
+<td>${escapeHTML(x.name)}</td>
+<td>${escapeHTML(x.contact)}</td>
+<td>${escapeHTML(x.phone)}</td>
+<td>${escapeHTML(x.email)}</td>
+</tr>
+
+`).join('');
+
+
+ document.getElementById('aissued').innerHTML=
+ D.issued.map(x=>`
+
+<tr>
+<td>${escapeHTML(x.date)}</td>
+<td>${escapeHTML(x.material)}</td>
+<td>${x.qty}</td>
+<td>${escapeHTML(x.unit)}</td>
+<td>${escapeHTML(x.to)}</td>
+<td>${escapeHTML(x.remarks)}</td>
+<td>${escapeHTML(x.user)}</td>
+</tr>
+
+`).join('');
+
+
+ document.getElementById('rv').textContent=
+ '₹ '+D.pos.reduce((a,x)=>a+(+x.total||0),0).toFixed(2);
+
+ document.getElementById('rs').textContent=D.sup.length;
+
 }
-function report(){let rows=[['Type','SR.No','Indent No.','Date','Department','Material Specification','Qty','Unit','Delivery','Status'],...D.prs.map(x=>['Purchase Request',x.id,x.indent||'',x.date,x.dept,x.spec,x.qty,x.unit,x.delivery,x.status]),...D.pos.map(x=>['Purchase Order',x.id,'','',x.material,x.qty,'','',x.status])];let csv=rows.map(r=>r.map(x=>`"${String(x).replaceAll('"','""')}"`).join(',')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='EngiStore_Report.csv';a.click()}
+
+
+function issueStock(i){
+
+ const x=D.stock[i];
+
+ if(!x)return;
+
+ const q=prompt(
+ 'Issue quantity (available '+x.qty+'):',
+ '1'
+ );
+
+ if(q===null)return;
+
+ const qty=+q;
+
+ if(!qty||qty<0||qty>x.qty)
+ return alert('Enter a valid quantity.');
+
+ const to=prompt('Issued To / Department:','');
+
+ if(to===null)return;
+
+ const rem=prompt('Remarks:','');
+
+ if(rem===null)return;
+
+ x.qty-=qty;
+
+ D.issued.push({
+   date:new Date().toLocaleDateString('en-IN'),
+   material:x.name,
+   qty:qty,
+   unit:x.unit,
+   to:to,
+   remarks:rem,
+   user:'admin'
+ });
+
+ save();
+
+ alert('Item issued. Stock updated automatically.');
+
+}
+
+
+function report(){
+
+ const rows=[
+ ['Type','SR.No','Indent No.','Date','Department','Material Specification','Qty','Unit','Delivery','Status'],
+
+ ...D.prs.map(x=>[
+ 'Purchase Request',
+ x.id,
+ x.indent||'',
+ x.date,
+ x.dept,
+ x.spec,
+ x.qty,
+ x.unit,
+ x.delivery,
+ x.status
+ ]),
+
+ ...D.pos.map(x=>[
+ 'Purchase Order',
+ x.id,
+ '',
+ x.date||'',
+ '',
+ x.material,
+ x.qty,
+ x.unit,
+ '',
+ x.status
+ ])
+ ];
+
+ const csv=rows
+ .map(r=>r.map(x=>`"${String(x??'').replace(/"/g,'""')}"`).join(','))
+ .join('\n');
+
+ const a=document.createElement('a');
+
+ a.href=URL.createObjectURL(
+ new Blob([csv],{type:'text/csv'})
+ );
+
+ a.download='EngiStore_Report.csv';
+
+ a.click();
+
+}
+
+
+function showUpdate(msg,button){
+
+ const e=document.getElementById('updateStatus');
+
+ e.innerHTML=msg+(button||'');
+
+ e.style.display='block';
+
+}
+
+
+function checkForUpdate(){
+
+ if(!window.engistoreUpdate){
+
+   alert('Update service is not available in this build.');
+
+   return;
+
+ }
+
+ showUpdate('Checking for update...');
+
+ window.engistoreUpdate.check()
+ .then(function(r){
+
+   if(r&&r.error)
+   showUpdate('Update check failed: '+r.error);
+
+ });
+
+}
+
+
+if(window.engistoreUpdate){
+
+ window.engistoreUpdate.onStatus(function(x){
+
+   if(x.type==='checking'){
+
+     showUpdate('Checking for update...');
+
+   }else if(x.type==='none'){
+
+     showUpdate('You are using the latest version.');
+
+     setTimeout(function(){
+
+       document.getElementById('updateStatus').style.display='none';
+
+     },3500);
+
+   }else if(x.type==='available'){
+
+     showUpdate(
+       'New version '+x.version+' is available. Downloading...'
+     );
+
+   }else if(x.type==='progress'){
+
+     showUpdate(
+       'Downloading update: '+x.percent+'%'
+     );
+
+   }else if(x.type==='downloaded'){
+
+     showUpdate(
+       'Update '+x.version+
+       ' is ready. '+
+       '<button class="btn" onclick="window.engistoreUpdate.install()" style="margin-left:8px">'+
+       'Install & Restart</button>'
+     );
+
+   }else if(x.type==='error'){
+
+     showUpdate('Update error: '+x.message);
+
+   }
+
+ });
+
+}
+
 </script>
-<div id="updateStatus" style="display:none;position:fixed;right:22px;bottom:22px;background:#12233f;color:#fff;padding:14px 18px;border-radius:10px;box-shadow:0 8px 30px #0003;z-index:9999;max-width:360px;font-size:13px"></div>
-<script>
-function showUpdate(msg,button){var e=document.getElementById('updateStatus');e.innerHTML=msg+(button||'');e.style.display='block';}
-function checkForUpdate(){if(!window.engistoreUpdate){alert('Update service is not available in this build.');return;}showUpdate('Checking for update...');window.engistoreUpdate.check().then(function(r){if(r&&r.error)showUpdate('Update check failed: '+r.error);});}
-if(window.engistoreUpdate){window.engistoreUpdate.onStatus(function(x){
- if(x.type==='checking')showUpdate('Checking for update...');
- else if(x.type==='none'){showUpdate('You are using the latest version.');setTimeout(function(){document.getElementById('updateStatus').style.display='none';},3500);}
- else if(x.type==='available')showUpdate('New version '+x.version+' is available. Downloading...');
- else if(x.type==='progress')showUpdate('Downloading update: '+x.percent+'%');
- else if(x.type==='downloaded')showUpdate('Update '+x.version+' is ready. <button class="btn" onclick="window.engistoreUpdate.install()" style="margin-left:8px">Install & Restart</button>');
- else if(x.type==='error')showUpdate('Update error: '+x.message);
- });}
-</script>
-</body></html>
+
+</body>
+</html>
