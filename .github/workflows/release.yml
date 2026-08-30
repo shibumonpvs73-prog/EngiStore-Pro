@@ -28,12 +28,15 @@ jobs:
       - name: Build Windows installer
         run: npm run dist
 
-      - name: Upload installer to GitHub Release
+      - name: Publish GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           VERSION=$(node -p "require('./package.json').version")
           TAG="v$VERSION"
-          echo "Uploading installer for $TAG"
-          gh release upload "$TAG" dist/*.exe --clobber
+
+          echo "Publishing version: $VERSION"
+          echo "Release tag: $TAG"
+
+          gh release upload "$TAG" dist/*.exe dist/*.blockmap dist/latest.yml --clobber
