@@ -1,20 +1,25 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>EngiStore Pro</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Segoe UI,Arial;background:#f4f6f9;color:#172033}
+body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f6f9;color:#172033}
+button,input,select,textarea{font-family:inherit}
 .login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#eaf0f7}
 .box{background:#fff;padding:35px;width:390px;border-radius:14px;box-shadow:0 15px 45px #0002}
 h1{margin:0 0 5px;color:#12233f}
+h2{margin-top:0}
 input,select,textarea{width:100%;padding:10px;border:1px solid #d0d5dd;border-radius:7px;margin:5px 0 12px}
+textarea{min-height:80px;resize:vertical}
 label{font-size:12px;font-weight:700}
 .btn{border:0;border-radius:7px;padding:10px 15px;background:#245b9e;color:#fff;font-weight:700;cursor:pointer}
 .btn:hover{opacity:.9}
 .app{display:none;height:100vh}
-.side{width:235px;background:#12233f;color:white;padding:20px 12px}
+.side{width:235px;background:#12233f;color:#fff;padding:20px 12px;flex-shrink:0}
 .brand{font-size:21px;font-weight:800;padding:5px 10px 25px}
 .brand small{display:block;font-size:10px;color:#aebed3}
 .nav button{width:100%;padding:12px;border:0;background:none;color:#dce6f2;text-align:left;border-radius:7px;cursor:pointer;font-size:14px;margin:2px 0}
@@ -24,31 +29,31 @@ label{font-size:12px;font-weight:700}
 .content{padding:24px}
 .page{display:none}
 .page.active{display:block}
-.cards{display:flex;gap:14px}
-.card{background:#fff;border:1px solid #e5e9ef;border-radius:12px;padding:18px;flex:1}
+.cards{display:flex;gap:14px;flex-wrap:wrap}
+.card{background:#fff;border:1px solid #e5e9ef;border-radius:12px;padding:18px;flex:1;min-width:150px}
 .muted{color:#667085;font-size:13px}
 .num{font-size:28px;font-weight:800;margin-top:6px}
 .panel{background:#fff;border:1px solid #e5e9ef;border-radius:12px;padding:18px;margin-top:16px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.full{grid-column:1/-1}
 table{width:100%;border-collapse:collapse}
-th,td{padding:11px;border-bottom:1px solid #edf0f3;text-align:left;font-size:13px}
+th,td{padding:10px;border-bottom:1px solid #edf0f3;text-align:left;font-size:13px}
 th{background:#f8fafc;color:#667085}
 .actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .badge{padding:4px 8px;border-radius:20px;background:#edf3ff;color:#245b9e;font-size:11px}
 .low{background:#fff0f0;color:#b42318}
-#updateStatus{display:none;position:fixed;right:22px;bottom:22px;background:#12233f;color:#fff;padding:14px 18px;border-radius:10px;box-shadow:0 8px 30px #0003;z-index:9999;max-width:400px;font-size:13px}
+.full{grid-column:1/-1}
+.update{display:none;position:fixed;right:22px;bottom:22px;background:#12233f;color:#fff;padding:14px 18px;border-radius:10px;box-shadow:0 8px 30px #0003;z-index:9999;max-width:400px;font-size:13px}
+.update button{margin-left:8px}
 @media(max-width:900px){
 .side{width:190px}
 .grid{grid-template-columns:1fr 1fr}
-.cards{flex-wrap:wrap}
-.card{min-width:180px}
 }
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
 <div id="login" class="login">
 <div class="box">
 <h1>EngiStore Pro</h1>
@@ -61,21 +66,19 @@ th{background:#f8fafc;color:#667085}
 
 <p>
 <label>Password</label>
-<input id="p" type="password" value="admin" autocomplete="current-password">
+<input id="p" type="password" value="admin" autocomplete="current-password"
+       onkeydown="if(event.key==='Enter')signin()">
 </p>
 
 <button class="btn" style="width:100%" onclick="signin()">SIGN IN</button>
 
-<p class="muted">Demo Login: admin / admin</p>
+<p id="loginMsg" class="muted">Demo Login: admin / admin</p>
 </div>
 </div>
 
+
+<!-- APPLICATION -->
 <div id="app" class="app">
-
-<div id="companyHeader" style="position:fixed;top:0;left:235px;right:0;height:62px;background:#fff;border-bottom:1px solid #e4e7ec;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:2;pointer-events:none">
-<b id="companyName" style="font-size:16px;color:#12233f">BML Parenteral Drugs</b>
-<span id="companyAddress" style="font-size:11px;color:#667085">Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661</span>
-</div>
 
 <aside class="side">
 
@@ -85,29 +88,42 @@ EngiStore Pro
 </div>
 
 <div class="nav">
-<button class="active" onclick="show('dashboard',this)">▣ Dashboard</button>
-<button onclick="show('pr',this)">＋ Purchase Request</button>
-<button onclick="show('po',this)">▤ Purchase Orders</button>
-<button onclick="show('receive',this)">⇩ Receive Material</button>
-<button onclick="show('stock',this)">◈ Stock</button>
-<button onclick="show('issue',this)">↗ Issue Material</button>
-<button onclick="show('issued',this)">↗ Issued Items</button>
-<button onclick="show('sup',this)">♙ Suppliers</button>
-<button onclick="show('reports',this)">▥ Reports</button>
-<button onclick="checkForUpdate()">↻ Check for Update</button>
-</div>
 
+<button class="active" onclick="showPage('dashboard',this)">▣ Dashboard</button>
+
+<button onclick="showPage('pr',this)">＋ Purchase Request</button>
+
+<button onclick="showPage('po',this)">▤ Purchase Orders</button>
+
+<button onclick="showPage('receive',this)">⇩ Receive Material</button>
+
+<button onclick="showPage('stock',this)">◈ Stock</button>
+
+<button onclick="showPage('issue',this)">↗ Issue Material</button>
+
+<button onclick="showPage('issued',this)">↗ Issued Items</button>
+
+<button onclick="showPage('sup',this)">♙ Suppliers</button>
+
+<button onclick="showPage('reports',this)">▥ Reports</button>
+
+<button onclick="checkForUpdate()">↻ Check for Update</button>
+
+</div>
 </aside>
+
 
 <main class="main">
 
-<div class="top" style="margin-top:62px">
+<div class="top">
 <b id="title">Dashboard</b>
 <span class="muted">Administrator</span>
 </div>
 
 <div class="content">
 
+
+<!-- DASHBOARD -->
 <section id="dashboard" class="page active">
 
 <h2>Dashboard</h2>
@@ -145,14 +161,15 @@ Issued Items
 <div class="panel">
 <h3>Quick Actions</h3>
 <div class="actions">
-<button class="btn" onclick="show('pr')">New Purchase Request</button>
-<button class="btn" onclick="show('po')">Create Purchase Order</button>
+<button class="btn" onclick="showPage('pr')">New Purchase Request</button>
+<button class="btn" onclick="showPage('po')">Create Purchase Order</button>
 </div>
 </div>
 
 </section>
 
 
+<!-- PURCHASE REQUEST -->
 <section id="pr" class="page">
 
 <h2>Purchase Request</h2>
@@ -216,24 +233,36 @@ Issued Items
 
 <div class="full">
 <label>Purpose / Remarks</label>
-<textarea id="remarks" placeholder="Reason or additional details"></textarea>
+<textarea id="remarks"></textarea>
 </div>
 
 </div>
 
 <div class="actions">
-<button class="btn" id="savePRBtn" onclick="addPR()">Save Purchase Request</button>
-<button class="btn" id="cancelEditBtn" style="display:none;background:#667085" onclick="cancelEdit()">Cancel Edit</button>
-<button class="btn" onclick="printCurrentPR()">Print Purchase Request</button>
-</div>
+
+<button class="btn" id="savePRBtn" onclick="addPR()">
+Save Purchase Request
+</button>
+
+<button class="btn" id="cancelEditBtn"
+style="display:none;background:#667085"
+onclick="cancelEdit()">
+Cancel Edit
+</button>
+
+<button class="btn" onclick="printCurrentPR()">
+Print Purchase Request
+</button>
 
 </div>
+</div>
+
 
 <div class="panel">
 
 <h3>Purchase Request File</h3>
 
-<div class="actions" style="align-items:end">
+<div class="actions">
 
 <div style="min-width:260px">
 <label>Indent No.</label>
@@ -242,7 +271,9 @@ Issued Items
 </select>
 </div>
 
-<button class="btn" onclick="printSelectedIndent()">Print Same Indent Together</button>
+<button class="btn" onclick="printSelectedIndent()">
+Print Same Indent Together
+</button>
 
 </div>
 
@@ -263,14 +294,15 @@ Same Indent No. ke sabhi SR.No ek hi print me saath aayenge.
 <th>Actions</th>
 </tr>
 </thead>
+
 <tbody id="aprfile"></tbody>
 </table>
 
 </div>
-
 </section>
 
 
+<!-- PURCHASE ORDERS -->
 <section id="po" class="page">
 
 <h2>Purchase Orders</h2>
@@ -291,7 +323,7 @@ Same Indent No. ke sabhi SR.No ek hi print me saath aayenge.
 
 <div>
 <label>Quantity</label>
-<input id="poqty" type="number" min="0">
+<input id="poqty" type="number" min="0" oninput="calcPOPreview()">
 </div>
 
 <div>
@@ -309,17 +341,19 @@ Same Indent No. ke sabhi SR.No ek hi print me saath aayenge.
 
 <div>
 <label>Rate</label>
-<input id="rate" type="number" min="0" step="0.01">
+<input id="rate" type="number" min="0" step="0.01" oninput="calcPOPreview()">
 </div>
 
 <div>
 <label>Discount (%)</label>
-<input id="discount" type="number" min="0" step="0.01" value="0" oninput="calcPOPreview()">
+<input id="discount" type="number" min="0" step="0.01"
+value="0" oninput="calcPOPreview()">
 </div>
 
 <div>
 <label>GST (%)</label>
-<input id="gst" type="number" min="0" step="0.01" value="18" oninput="calcPOPreview()">
+<input id="gst" type="number" min="0" step="0.01"
+value="18" oninput="calcPOPreview()">
 </div>
 
 <div>
@@ -334,11 +368,21 @@ Subtotal: ₹ 0.00 | Discount: ₹ 0.00 | GST: ₹ 0.00
 </div>
 
 <div class="actions">
-<button class="btn" id="savePOBtn" onclick="addPO()">Create Purchase Order</button>
-<button class="btn" id="cancelPOBtn" style="display:none;background:#667085" onclick="cancelPOEdit()">Cancel Edit</button>
+
+<button class="btn" id="savePOBtn" onclick="addPO()">
+Create Purchase Order
+</button>
+
+<button class="btn" id="cancelPOBtn"
+style="display:none;background:#667085"
+onclick="cancelPOEdit()">
+Cancel Edit
+</button>
+
 </div>
 
 </div>
+
 
 <div class="panel">
 
@@ -357,6 +401,7 @@ Subtotal: ₹ 0.00 | Discount: ₹ 0.00 | GST: ₹ 0.00
 <th>Actions</th>
 </tr>
 </thead>
+
 <tbody id="apos"></tbody>
 </table>
 
@@ -365,12 +410,14 @@ Subtotal: ₹ 0.00 | Discount: ₹ 0.00 | GST: ₹ 0.00
 </section>
 
 
+<!-- RECEIVE -->
 <section id="receive" class="page">
 
 <h2>Receive Material</h2>
 
 <div class="muted">
-Receive material against a Purchase Order. Received quantity is automatically added to Stock.
+Receive material against a Purchase Order.
+Received quantity automatically adds to Stock.
 </div>
 
 <div class="panel">
@@ -417,10 +464,13 @@ Receive material against a Purchase Order. Received quantity is automatically ad
 </div>
 
 <div class="actions">
-<button class="btn" onclick="saveReceipt()">Receive & Add to Stock</button>
+<button class="btn" onclick="saveReceipt()">
+Receive & Add to Stock
+</button>
 </div>
 
 </div>
+
 
 <div class="panel">
 
@@ -438,6 +488,7 @@ Receive material against a Purchase Order. Received quantity is automatically ad
 <th>Status</th>
 </tr>
 </thead>
+
 <tbody id="areceive"></tbody>
 </table>
 
@@ -446,12 +497,41 @@ Receive material against a Purchase Order. Received quantity is automatically ad
 </section>
 
 
+<!-- STOCK -->
+<section id="stock" class="page">
+
+<h2>Stock</h2>
+
+<div class="panel">
+
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Material</th>
+<th>Unit</th>
+<th>Current Stock</th>
+<th>Minimum</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="astock"></tbody>
+</table>
+
+</div>
+
+</section>
+
+
+<!-- ISSUE -->
 <section id="issue" class="page">
 
 <h2>Issue Material</h2>
 
 <div class="muted">
-Issue material from Stock. Stock quantity is automatically reduced.
+Issue material from Stock. Stock quantity automatically reduces.
 </div>
 
 <div class="panel">
@@ -493,40 +573,21 @@ Issue material from Stock. Stock quantity is automatically reduced.
 </div>
 
 <div class="actions">
-<button class="btn" style="background:#7a3e9d" onclick="saveIssue()">Issue & Reduce Stock</button>
-</div>
+
+<button class="btn"
+style="background:#7a3e9d"
+onclick="saveIssue()">
+Issue & Reduce Stock
+</button>
 
 </div>
-
-</section>
-
-
-<section id="stock" class="page">
-
-<h2>Stock</h2>
-
-<div class="panel">
-
-<table>
-<thead>
-<tr>
-<th>Code</th>
-<th>Material</th>
-<th>Unit</th>
-<th>Current Stock</th>
-<th>Minimum</th>
-<th>Status</th>
-<th>Action</th>
-</tr>
-</thead>
-<tbody id="astock"></tbody>
-</table>
 
 </div>
 
 </section>
 
 
+<!-- ISSUED ITEMS -->
 <section id="issued" class="page">
 
 <h2>Issued Items</h2>
@@ -545,6 +606,7 @@ Issue material from Stock. Stock quantity is automatically reduced.
 <th>User</th>
 </tr>
 </thead>
+
 <tbody id="aissued"></tbody>
 </table>
 
@@ -553,6 +615,7 @@ Issue material from Stock. Stock quantity is automatically reduced.
 </section>
 
 
+<!-- SUPPLIERS -->
 <section id="sup" class="page">
 
 <h2>Suppliers</h2>
@@ -584,10 +647,13 @@ Issue material from Stock. Stock quantity is automatically reduced.
 </div>
 
 <div class="actions">
-<button class="btn" onclick="addSupplier()">Save Supplier</button>
+<button class="btn" onclick="addSupplier()">
+Save Supplier
+</button>
 </div>
 
 </div>
+
 
 <div class="panel">
 
@@ -600,6 +666,7 @@ Issue material from Stock. Stock quantity is automatically reduced.
 <th>Email</th>
 </tr>
 </thead>
+
 <tbody id="asup"></tbody>
 </table>
 
@@ -608,6 +675,7 @@ Issue material from Stock. Stock quantity is automatically reduced.
 </section>
 
 
+<!-- REPORTS -->
 <section id="reports" class="page">
 
 <h2>Reports</h2>
@@ -626,6 +694,7 @@ Suppliers
 
 </div>
 
+
 <div class="panel">
 
 <h3>Company Heading</h3>
@@ -639,14 +708,22 @@ Suppliers
 
 <div>
 <label>Company Address</label>
-<input id="caddress" value="Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661">
+<input id="caddress"
+value="Raipur Bhagwanpur Roorkee (Ukh)-247661">
 </div>
 
 </div>
 
 <div class="actions">
-<button class="btn" onclick="saveCompany()">Save Heading</button>
-<button class="btn" onclick="report()">Export CSV Report</button>
+
+<button class="btn" onclick="saveCompany()">
+Save Heading
+</button>
+
+<button class="btn" onclick="report()">
+Export CSV Report
+</button>
+
 </div>
 
 </div>
@@ -658,302 +735,346 @@ Suppliers
 </div>
 
 
-<div id="updateStatus"></div>
+<!-- UPDATE MESSAGE -->
+<div id="updateStatus" class="update"></div>
 
 
 <script>
 
-'use strict';
+/* =========================
+   DATA
+========================= */
 
-const DATA_VERSION='2.3.0';
+const DATA_VERSION='2.3';
 
-let D=JSON.parse(
- localStorage.getItem('engistore') ||
- '{"prs":[],"pos":[],"sup":[],"stock":[],"issued":[],"version":"2.3.0"}'
+let D;
+
+try{
+D=JSON.parse(
+localStorage.getItem('engistore') ||
+'{"prs":[],"pos":[],"sup":[],"stock":[],"issued":[],"version":"2.3"}'
 );
+}catch(e){
+D={prs:[],pos:[],sup:[],stock:[],issued:[],version:DATA_VERSION};
+}
 
 if(!Array.isArray(D.prs))D.prs=[];
 if(!Array.isArray(D.pos))D.pos=[];
 if(!Array.isArray(D.sup))D.sup=[];
 if(!Array.isArray(D.stock))D.stock=[];
-if(!Array.isArray(D.issued))D.issued[];
+if(!Array.isArray(D.issued))D.issued=[];
 
-if(!D.version)D.version=DATA_VERSION;
+D.version=DATA_VERSION;
 
 function save(){
- localStorage.setItem('engistore',JSON.stringify(D));
- refresh();
+localStorage.setItem('engistore',JSON.stringify(D));
+refresh();
 }
 
+
+/* =========================
+   LOGIN
+========================= */
 
 function signin(){
 
- const username=document.getElementById('u').value.trim();
- const password=document.getElementById('p').value;
+const username=document.getElementById('u').value.trim();
+const password=document.getElementById('p').value;
 
- if(username==='admin' && password==='admin'){
+const msg=document.getElementById('loginMsg');
 
-   document.getElementById('login').style.display='none';
-   document.getElementById('app').style.display='flex';
+if(username==='admin' && password==='admin'){
 
-   refresh();
+document.getElementById('login').style.display='none';
+document.getElementById('app').style.display='flex';
 
- }else{
+msg.textContent='Login successful';
 
-   alert('Invalid Username or Password');
+refresh();
 
- }
+}else{
+
+msg.textContent='Invalid Username or Password';
+msg.style.color='#b42318';
+
+}
 
 }
 
 
-document.getElementById('p').addEventListener('keydown',function(e){
- if(e.key==='Enter')signin();
-});
+/* =========================
+   PAGE NAVIGATION
+========================= */
 
+function showPage(id,btn){
 
-function show(id,b){
+document.querySelectorAll('.page')
+.forEach(x=>x.classList.remove('active'));
 
- document.querySelectorAll('.page')
- .forEach(x=>x.classList.remove('active'));
+const page=document.getElementById(id);
 
- const page=document.getElementById(id);
+if(page)page.classList.add('active');
 
- if(page)page.classList.add('active');
+document.querySelectorAll('.nav button')
+.forEach(x=>x.classList.remove('active'));
 
- document.querySelectorAll('.nav button')
- .forEach(x=>x.classList.remove('active'));
+if(btn)btn.classList.add('active');
 
- if(b)b.classList.add('active');
+const titles={
+dashboard:'Dashboard',
+pr:'Purchase Request',
+po:'Purchase Orders',
+receive:'Receive Material',
+stock:'Stock',
+issue:'Issue Material',
+issued:'Issued Items',
+sup:'Suppliers',
+reports:'Reports'
+};
 
- const titles={
- dashboard:'Dashboard',
- pr:'Purchase Request',
- po:'Purchase Orders',
- receive:'Receive Material',
- stock:'Stock',
- issue:'Issue Material',
- issued:'Issued Items',
- sup:'Suppliers',
- reports:'Reports'
- };
+document.getElementById('title').textContent=titles[id]||'Dashboard';
 
- document.getElementById('title').textContent=titles[id]||id;
+refresh();
 
- refresh();
 }
 
+
+/* =========================
+   PURCHASE REQUEST
+========================= */
 
 let editingPRIndex=-1;
 
-
 function normalizeSR(){
 
- const groups={};
+const groups={};
 
- D.prs.forEach(x=>{
+D.prs.forEach(x=>{
 
-   const k=String(x.indent||'').trim().toLowerCase();
+const key=String(x.indent||'').trim().toLowerCase();
 
-   if(!groups[k])groups[k]=0;
+if(!groups[key])groups[key]=0;
 
-   x.id=++groups[k];
+x.id=++groups[key];
 
- });
+});
 
 }
 
 
 function clearPRForm(){
 
- document.getElementById('indentNo').value=
- D.prs.length ? (D.prs[D.prs.length-1].indent||'') : '';
+document.getElementById('indentNo').value='';
+document.getElementById('rspec').value='';
+document.getElementById('rqty').value='';
+document.getElementById('runit').value='Nos.';
+document.getElementById('delivery').value='Standard';
+document.getElementById('rdate').value='';
+document.getElementById('remarks').value='';
 
- document.getElementById('rspec').value='';
- document.getElementById('rqty').value='';
- document.getElementById('runit').value='Nos.';
- document.getElementById('delivery').value='Standard';
- document.getElementById('rdate').value='';
- document.getElementById('remarks').value='';
+editingPRIndex=-1;
 
- editingPRIndex=-1;
+document.getElementById('savePRBtn').textContent=
+'Save Purchase Request';
 
- document.getElementById('savePRBtn').textContent='Save Purchase Request';
- document.getElementById('cancelEditBtn').style.display='none';
+document.getElementById('cancelEditBtn').style.display='none';
+
 }
 
 
 function addPR(){
 
- const indent=document.getElementById('indentNo').value.trim();
- const spec=document.getElementById('rspec').value.trim();
- const qty=document.getElementById('rqty').value;
+const indent=document.getElementById('indentNo').value.trim();
+const spec=document.getElementById('rspec').value.trim();
+const qty=document.getElementById('rqty').value;
 
- if(!indent||!spec||!qty)
- return alert('Indent No., Material Specification and Quantity are required');
+if(!indent||!spec||!qty){
 
- if(editingPRIndex>=0){
+alert('Indent No., Material Specification and Quantity are required');
+return;
 
-   const x=D.prs[editingPRIndex];
+}
 
-   x.indent=indent;
-   x.dept=document.getElementById('dept').value;
-   x.spec=spec;
-   x.qty=+qty;
-   x.unit=document.getElementById('runit').value;
-   x.delivery=document.getElementById('delivery').value;
-   x.required=document.getElementById('rdate').value;
-   x.remarks=document.getElementById('remarks').value;
+if(editingPRIndex>=0){
 
-   normalizeSR();
-   save();
-   clearPRForm();
+const x=D.prs[editingPRIndex];
 
-   alert('Purchase Request updated successfully.');
+x.indent=indent;
+x.dept=document.getElementById('dept').value;
+x.spec=spec;
+x.qty=Number(qty);
+x.unit=document.getElementById('runit').value;
+x.delivery=document.getElementById('delivery').value;
+x.required=document.getElementById('rdate').value;
+x.remarks=document.getElementById('remarks').value;
 
-   return;
- }
+normalizeSR();
+save();
+clearPRForm();
 
- const x={
-   id:0,
-   indent:indent,
-   date:new Date().toLocaleDateString('en-IN'),
-   dept:document.getElementById('dept').value,
-   spec:spec,
-   qty:+qty,
-   unit:document.getElementById('runit').value,
-   delivery:document.getElementById('delivery').value,
-   required:document.getElementById('rdate').value,
-   remarks:document.getElementById('remarks').value,
-   status:'Created'
- };
+alert('Purchase Request updated successfully.');
 
- D.prs.push(x);
+return;
+}
 
- normalizeSR();
 
- save();
+D.prs.push({
 
- clearPRForm();
+id:0,
+indent:indent,
+date:new Date().toLocaleDateString('en-IN'),
+dept:document.getElementById('dept').value,
+spec:spec,
+qty:Number(qty),
+unit:document.getElementById('runit').value,
+delivery:document.getElementById('delivery').value,
+required:document.getElementById('rdate').value,
+remarks:document.getElementById('remarks').value,
+status:'Created'
 
- alert('Purchase Request saved. SR.No: '+x.id);
+});
+
+normalizeSR();
+
+save();
+
+const x=D.prs[D.prs.length-1];
+
+clearPRForm();
+
+alert('Purchase Request saved. SR.No: '+x.id);
 
 }
 
 
 function editPR(i){
 
- const x=D.prs[i];
+const x=D.prs[i];
 
- if(!x)return;
+if(!x)return;
 
- document.getElementById('indentNo').value=x.indent||'';
- document.getElementById('dept').value=x.dept||'Engineering';
- document.getElementById('rspec').value=x.spec||'';
- document.getElementById('rqty').value=x.qty||'';
- document.getElementById('runit').value=x.unit||'Nos.';
- document.getElementById('delivery').value=x.delivery||'Standard';
- document.getElementById('rdate').value=x.required||'';
- document.getElementById('remarks').value=x.remarks||'';
+document.getElementById('indentNo').value=x.indent||'';
+document.getElementById('dept').value=x.dept||'Engineering';
+document.getElementById('rspec').value=x.spec||'';
+document.getElementById('rqty').value=x.qty||'';
+document.getElementById('runit').value=x.unit||'Nos.';
+document.getElementById('delivery').value=x.delivery||'Standard';
+document.getElementById('rdate').value=x.required||'';
+document.getElementById('remarks').value=x.remarks||'';
 
- editingPRIndex=i;
+editingPRIndex=i;
 
- document.getElementById('savePRBtn').textContent='Update Purchase Request';
- document.getElementById('cancelEditBtn').style.display='inline-block';
+document.getElementById('savePRBtn').textContent=
+'Update Purchase Request';
 
- show('pr');
+document.getElementById('cancelEditBtn').style.display=
+'inline-block';
+
+showPage('pr');
 
 }
 
 
 function cancelEdit(){
- clearPRForm();
+clearPRForm();
 }
 
 
 function deletePR(i){
 
- const x=D.prs[i];
+const x=D.prs[i];
 
- if(!x)return;
+if(!x)return;
 
- if(!confirm('Delete SR.No. '+x.id+' from Indent No. '+x.indent+'?'))return;
+if(!confirm('Delete SR.No. '+x.id+' from Indent No. '+x.indent+'?'))
+return;
 
- D.prs.splice(i,1);
+D.prs.splice(i,1);
 
- normalizeSR();
+normalizeSR();
 
- save();
-
-}
-
-
-function escapeHTML(value){
-
- return String(value??'')
- .replace(/&/g,'&amp;')
- .replace(/</g,'&lt;')
- .replace(/>/g,'&gt;')
- .replace(/"/g,'&quot;')
- .replace(/'/g,'&#039;');
+save();
 
 }
 
+
+/* =========================
+   PRINT PURCHASE REQUEST
+========================= */
 
 function printPR(x){
 
- const cname=localStorage.getItem('companyName')||'BML Parenteral Drugs';
- const caddress=localStorage.getItem('companyAddress')||'Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661';
+const cname=localStorage.getItem('companyName')||
+'BML Parenteral Drugs';
 
- const w=window.open('','_blank','width=900,height=700');
+const caddress=localStorage.getItem('companyAddress')||
+'Raipur Bhagwanpur Roorkee (Ukh)-247661';
 
- if(!w)return alert('Please allow pop-ups for printing.');
+const w=window.open(
+'',
+'_blank',
+'width=900,height=700'
+);
 
- w.document.write(`
+if(!w){
+
+alert('Print window blocked. Please allow pop-ups.');
+return;
+
+}
+
+w.document.write(`
 <html>
 <head>
 <title>Purchase Requisition Slip</title>
+
 <style>
 body{font-family:Arial;padding:35px;color:#111}
 .company{text-align:center}
 .company b{font-size:21px}
 .company span{display:block;font-size:12px;margin-top:4px}
-.title{text-align:center;font-size:18px;font-weight:700;margin:18px 0;border-bottom:1px solid #111;padding-bottom:8px}
-.meta{display:flex;justify-content:space-between;font-size:13px;margin:10px 0 16px}
+.title{text-align:center;font-size:18px;font-weight:bold;margin:18px 0}
+.meta{display:flex;justify-content:space-between;margin:12px 0 18px}
 table{width:100%;border-collapse:collapse}
-td,th{border:1px solid #333;padding:9px;font-size:12px}
-th{background:#f2f2f2}
-.sign{margin-top:75px;display:flex;justify-content:space-between;font-size:12px}
-@media print{button{display:none}}
+th,td{border:1px solid #333;padding:9px;font-size:12px}
+th{background:#eee}
+.sign{margin-top:75px;display:flex;justify-content:space-between}
 </style>
+
 </head>
+
 <body>
 
 <div class="company">
-<b>${escapeHTML(cname)}</b>
-<span>${escapeHTML(caddress)}</span>
+<b>${esc(cname)}</b>
+<span>${esc(caddress)}</span>
 </div>
 
-<div class="title">PURCHASE REQUISITION SLIP</div>
+<div class="title">
+PURCHASE REQUISITION SLIP
+</div>
 
 <div class="meta">
-<span><b>Indent No.:</b> ${escapeHTML(x.indent)}</span>
-<span><b>Date:</b> ${escapeHTML(x.date)}</span>
+<span><b>Indent No.:</b> ${esc(x.indent)}</span>
+<span><b>Date:</b> ${esc(x.date)}</span>
 </div>
 
 <table>
+
 <tr>
 <th>SR.No.</th>
 <th>Item Name / Spec.</th>
 <th>Qty.</th>
 <th>Purpose</th>
 </tr>
+
 <tr>
-<td>${x.id}</td>
-<td>${escapeHTML(x.spec)}</td>
-<td>${escapeHTML(x.qty)} ${escapeHTML(x.unit)}</td>
-<td>${escapeHTML(x.remarks)}</td>
+<td>${esc(x.id)}</td>
+<td>${esc(x.spec)}</td>
+<td>${esc(x.qty)} ${esc(x.unit)}</td>
+<td>${esc(x.remarks||'')}</td>
 </tr>
+
 </table>
 
 <div class="sign">
@@ -961,86 +1082,112 @@ th{background:#f2f2f2}
 <span>Approved By: __________________</span>
 </div>
 
-<div style="text-align:center;margin-top:30px">
+<br>
+
 <button onclick="window.print()">PRINT</button>
-</div>
 
 </body>
 </html>
 `);
 
- w.document.close();
+w.document.close();
 
 }
 
 
 function printSelectedIndent(){
 
- const ind=document.getElementById('printIndent').value.trim();
+const ind=document.getElementById('printIndent').value.trim();
 
- if(!ind)return alert('Select an Indent No.');
+if(!ind){
 
- const rows=D.prs
- .filter(x=>String(x.indent||'').trim()===ind)
- .sort((a,b)=>(+a.id)-(+b.id));
+alert('Select an Indent No.');
+return;
 
- if(!rows.length)return alert('No Purchase Request found.');
+}
 
- const cname=localStorage.getItem('companyName')||'BML Parenteral Drugs';
- const caddress=localStorage.getItem('companyAddress')||'Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661';
+const rows=D.prs
+.filter(x=>String(x.indent).trim()===ind)
+.sort((a,b)=>Number(a.id)-Number(b.id));
 
- const w=window.open('','_blank','width=1000,height=750');
+if(!rows.length){
 
- if(!w)return alert('Please allow pop-ups for printing.');
+alert('No Purchase Request found.');
+return;
 
- const body=rows.map(x=>`
+}
+
+const cname=localStorage.getItem('companyName')||
+'BML Parenteral Drugs';
+
+const caddress=localStorage.getItem('companyAddress')||
+'Raipur Bhagwanpur Roorkee (Ukh)-247661';
+
+const body=rows.map(x=>`
 <tr>
-<td>${x.id}</td>
-<td>${escapeHTML(x.spec)}</td>
-<td>${escapeHTML(x.qty)} ${escapeHTML(x.unit)}</td>
-<td>${escapeHTML(x.remarks)}</td>
-</tr>`).join('');
+<td>${esc(x.id)}</td>
+<td>${esc(x.spec)}</td>
+<td>${esc(x.qty)} ${esc(x.unit)}</td>
+<td>${esc(x.remarks||'')}</td>
+</tr>
+`).join('');
 
- w.document.write(`
+const w=window.open('','_blank','width=1000,height=750');
+
+if(!w){
+
+alert('Print window blocked.');
+return;
+
+}
+
+w.document.write(`
 <html>
 <head>
-<title>Purchase Requisition Slip</title>
+<title>Purchase Requisition - ${esc(ind)}</title>
+
 <style>
 body{font-family:Arial;padding:30px;color:#111}
 .company{text-align:center}
 .company b{font-size:21px}
 .company span{display:block;font-size:12px;margin-top:4px}
-.title{text-align:center;font-size:18px;font-weight:700;margin:18px 0;border-bottom:1px solid #111;padding-bottom:8px}
-.meta{display:flex;justify-content:space-between;font-size:13px;margin:10px 0 16px}
+.title{text-align:center;font-size:18px;font-weight:bold;margin:18px 0}
+.meta{display:flex;justify-content:space-between;margin:12px 0 18px}
 table{width:100%;border-collapse:collapse}
-td,th{border:1px solid #333;padding:8px;font-size:12px}
-th{background:#f2f2f2}
-.sign{margin-top:70px;display:flex;justify-content:space-between;font-size:12px}
-@media print{button{display:none}}
+th,td{border:1px solid #333;padding:8px;font-size:12px}
+th{background:#eee}
+.sign{margin-top:70px;display:flex;justify-content:space-between}
 </style>
+
 </head>
+
 <body>
 
 <div class="company">
-<b>${escapeHTML(cname)}</b>
-<span>${escapeHTML(caddress)}</span>
+<b>${esc(cname)}</b>
+<span>${esc(caddress)}</span>
 </div>
 
-<div class="title">PURCHASE REQUISITION SLIP</div>
+<div class="title">
+PURCHASE REQUISITION SLIP
+</div>
 
 <div class="meta">
-<span><b>Indent No.:</b> ${escapeHTML(ind)}</span>
-<span><b>Date:</b> ${escapeHTML(rows[0].date||'')}</span>
+<span><b>Indent No.:</b> ${esc(ind)}</span>
+<span><b>Date:</b> ${esc(rows[0].date)}</span>
 </div>
 
 <table>
+
 <tr>
 <th>SR.No.</th>
 <th>Item Name / Spec.</th>
 <th>Qty.</th>
 <th>Purpose</th>
 </tr>
+
 ${body}
+
 </table>
 
 <div class="sign">
@@ -1048,250 +1195,291 @@ ${body}
 <span>Approved By: __________________</span>
 </div>
 
-<div style="text-align:center;margin-top:30px">
+<br>
+
 <button onclick="window.print()">PRINT</button>
-</div>
 
 </body>
 </html>
 `);
 
- w.document.close();
+w.document.close();
 
 }
 
 
 function printCurrentPR(){
 
- if(!D.prs.length)
- return alert('No Purchase Request available');
+if(!D.prs.length){
 
- printPR(D.prs[D.prs.length-1]);
+alert('No Purchase Request available');
+return;
 
 }
 
+printPR(D.prs[D.prs.length-1]);
+
+}
+
+
+/* =========================
+   PURCHASE ORDER
+========================= */
 
 let editingPOIndex=-1;
 
 
 function poAmounts(q,r,disc,gst){
 
- const subtotal=(+q||0)*(+r||0);
- const d=subtotal*(+disc||0)/100;
- const taxable=Math.max(0,subtotal-d);
- const g=taxable*(+gst||0)/100;
+const subtotal=(Number(q)||0)*(Number(r)||0);
 
- return{
- subtotal,
- discountAmount:d,
- gstAmount:g,
- finalAmount:taxable+g
- };
+const discountAmount=
+subtotal*(Number(disc)||0)/100;
+
+const taxable=
+Math.max(0,subtotal-discountAmount);
+
+const gstAmount=
+taxable*(Number(gst)||0)/100;
+
+return{
+subtotal,
+discountAmount,
+gstAmount,
+finalAmount:taxable+gstAmount
+};
 
 }
 
 
 function calcPOPreview(){
 
- const a=poAmounts(
- document.getElementById('poqty').value,
- document.getElementById('rate').value,
- document.getElementById('discount').value,
- document.getElementById('gst').value
- );
+const a=poAmounts(
+document.getElementById('poqty').value,
+document.getElementById('rate').value,
+document.getElementById('discount').value,
+document.getElementById('gst').value
+);
 
- document.getElementById('finalAmount').value=a.finalAmount.toFixed(2);
+document.getElementById('finalAmount').value=
+a.finalAmount.toFixed(2);
 
- document.getElementById('poCalc').textContent=
- 'Subtotal: ₹ '+a.subtotal.toFixed(2)+
- ' | Discount: ₹ '+a.discountAmount.toFixed(2)+
- ' | GST: ₹ '+a.gstAmount.toFixed(2);
+document.getElementById('poCalc').textContent=
+'Subtotal: ₹ '+a.subtotal.toFixed(2)+
+' | Discount: ₹ '+a.discountAmount.toFixed(2)+
+' | GST: ₹ '+a.gstAmount.toFixed(2);
 
 }
 
 
 function clearPOForm(){
 
- document.getElementById('supplier').value='';
- document.getElementById('pomaterial').value='';
- document.getElementById('poqty').value='';
- document.getElementById('pounit').value='Nos.';
- document.getElementById('rate').value='';
- document.getElementById('discount').value='0';
- document.getElementById('gst').value='18';
- document.getElementById('finalAmount').value='';
+document.getElementById('supplier').value='';
+document.getElementById('pomaterial').value='';
+document.getElementById('poqty').value='';
+document.getElementById('pounit').value='Nos.';
+document.getElementById('rate').value='';
+document.getElementById('discount').value='0';
+document.getElementById('gst').value='18';
+document.getElementById('finalAmount').value='';
 
- editingPOIndex=-1;
+editingPOIndex=-1;
 
- document.getElementById('savePOBtn').textContent='Create Purchase Order';
- document.getElementById('cancelPOBtn').style.display='none';
+document.getElementById('savePOBtn').textContent=
+'Create Purchase Order';
 
- calcPOPreview();
+document.getElementById('cancelPOBtn').style.display='none';
+
+calcPOPreview();
 
 }
 
 
 function addPO(){
 
- const supplier=document.getElementById('supplier').value.trim();
- const material=document.getElementById('pomaterial').value.trim();
- const qty=document.getElementById('poqty').value;
+const supplier=document.getElementById('supplier').value.trim();
+const material=document.getElementById('pomaterial').value.trim();
+const qty=document.getElementById('poqty').value;
 
- if(!supplier||!material||!qty)
- return alert('Fill supplier, material and quantity');
+if(!supplier||!material||!qty){
 
- const q=+qty;
- const r=+document.getElementById('rate').value||0;
- const d=+document.getElementById('discount').value||0;
- const g=+document.getElementById('gst').value||0;
+alert('Fill supplier, material and quantity');
+return;
 
- const a=poAmounts(q,r,d,g);
+}
 
- if(editingPOIndex>=0){
+const q=Number(qty);
+const r=Number(document.getElementById('rate').value)||0;
+const d=Number(document.getElementById('discount').value)||0;
+const g=Number(document.getElementById('gst').value)||0;
 
-   const x=D.pos[editingPOIndex];
+const a=poAmounts(q,r,d,g);
 
-   x.supplier=supplier;
-   x.material=material;
-   x.qty=q;
-   x.unit=document.getElementById('pounit').value;
-   x.rate=r;
-   x.subtotal=a.subtotal;
-   x.discount=d;
-   x.discountAmount=a.discountAmount;
-   x.gst=g;
-   x.gstAmount=a.gstAmount;
-   x.total=a.finalAmount;
+if(editingPOIndex>=0){
 
-   save();
-   clearPOForm();
+const x=D.pos[editingPOIndex];
 
-   alert('Purchase Order updated successfully.');
+x.supplier=supplier;
+x.material=material;
+x.qty=q;
+x.unit=document.getElementById('pounit').value;
+x.rate=r;
+x.discount=d;
+x.discountAmount=a.discountAmount;
+x.gst=g;
+x.gstAmount=a.gstAmount;
+x.subtotal=a.subtotal;
+x.total=a.finalAmount;
 
-   return;
- }
+save();
+clearPOForm();
 
- D.pos.push({
-   id:'PO-'+String(D.pos.length+1).padStart(4,'0'),
-   supplier,
-   material,
-   qty:q,
-   unit:document.getElementById('pounit').value,
-   rate:r,
-   subtotal:a.subtotal,
-   discount:d,
-   discountAmount:a.discountAmount,
-   gst:g,
-   gstAmount:a.gstAmount,
-   total:a.finalAmount,
-   status:'Approved',
-   receivedQty:0,
-   date:new Date().toLocaleDateString('en-IN')
- });
+alert('Purchase Order updated successfully.');
 
- save();
- clearPOForm();
+return;
 
- alert('Purchase Order created.');
+}
+
+D.pos.push({
+
+id:'PO-'+String(D.pos.length+1).padStart(4,'0'),
+supplier,
+material,
+qty:q,
+unit:document.getElementById('pounit').value,
+rate:r,
+subtotal:a.subtotal,
+discount:d,
+discountAmount:a.discountAmount,
+gst:g,
+gstAmount:a.gstAmount,
+total:a.finalAmount,
+status:'Approved',
+receivedQty:0,
+date:new Date().toLocaleDateString('en-IN')
+
+});
+
+save();
+clearPOForm();
+
+alert('Purchase Order created');
 
 }
 
 
 function editPO(i){
 
- const x=D.pos[i];
+const x=D.pos[i];
 
- if(!x)return;
+if(!x)return;
 
- document.getElementById('supplier').value=x.supplier||'';
- document.getElementById('pomaterial').value=x.material||'';
- document.getElementById('poqty').value=x.qty||'';
- document.getElementById('pounit').value=x.unit||'Nos.';
- document.getElementById('rate').value=x.rate||0;
- document.getElementById('discount').value=x.discount||0;
- document.getElementById('gst').value=x.gst===undefined?18:x.gst;
+document.getElementById('supplier').value=x.supplier||'';
+document.getElementById('pomaterial').value=x.material||'';
+document.getElementById('poqty').value=x.qty||'';
+document.getElementById('pounit').value=x.unit||'Nos.';
+document.getElementById('rate').value=x.rate||0;
+document.getElementById('discount').value=x.discount||0;
+document.getElementById('gst').value=
+x.gst===undefined?18:x.gst;
 
- editingPOIndex=i;
+editingPOIndex=i;
 
- calcPOPreview();
+calcPOPreview();
 
- document.getElementById('savePOBtn').textContent='Update Purchase Order';
- document.getElementById('cancelPOBtn').style.display='inline-block';
+document.getElementById('savePOBtn').textContent=
+'Update Purchase Order';
 
- show('po');
+document.getElementById('cancelPOBtn').style.display=
+'inline-block';
+
+showPage('po');
 
 }
 
 
 function cancelPOEdit(){
- clearPOForm();
+clearPOForm();
 }
 
 
 function deletePO(i){
 
- const x=D.pos[i];
+if(!D.pos[i])return;
 
- if(!x)return;
+if(!confirm('Delete '+D.pos[i].id+'?'))
+return;
 
- if(!confirm('Delete '+x.id+'?'))return;
+D.pos.splice(i,1);
 
- D.pos.splice(i,1);
-
- save();
+save();
 
 }
 
 
 function printPO(x){
 
- const cname=localStorage.getItem('companyName')||'BML Parenteral Drugs';
- const caddress=localStorage.getItem('companyAddress')||'Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661';
+const cname=localStorage.getItem('companyName')||
+'BML Parenteral Drugs';
 
- const a=poAmounts(x.qty,x.rate,x.discount,x.gst);
+const caddress=localStorage.getItem('companyAddress')||
+'Raipur Bhagwanpur Roorkee (Ukh)-247661';
 
- const w=window.open('','_blank','width=1000,height=750');
+const a=poAmounts(
+x.qty,x.rate,x.discount,x.gst===undefined?18:x.gst
+);
 
- if(!w)return alert('Please allow pop-ups for printing.');
+const w=window.open('','_blank','width=1000,height=750');
 
- w.document.write(`
+if(!w){
+
+alert('Print window blocked.');
+return;
+
+}
+
+w.document.write(`
 <html>
 <head>
-<title>Purchase Order</title>
+
+<title>Purchase Order ${esc(x.id)}</title>
+
 <style>
 body{font-family:Arial;padding:32px;color:#111}
 .company{text-align:center}
 .company b{font-size:22px}
 .company span{display:block;font-size:12px;margin-top:4px}
-.title{text-align:center;font-size:19px;font-weight:700;margin:18px 0}
-.meta{display:flex;justify-content:space-between;margin:10px 0 18px;font-size:13px}
+.title{text-align:center;font-size:19px;font-weight:bold;margin:18px 0}
+.meta{display:flex;justify-content:space-between;margin:10px 0 18px}
 table{width:100%;border-collapse:collapse}
 th,td{border:1px solid #333;padding:9px;font-size:12px}
-th{background:#f2f2f2;text-align:left}
+th{background:#eee}
 .totals{margin-left:auto;width:340px;margin-top:15px}
 .totals div{display:flex;justify-content:space-between;padding:5px}
-.final{font-weight:700;border-top:2px solid #111;font-size:14px}
-.sign{margin-top:80px;display:flex;justify-content:space-between;font-size:12px}
-@media print{button{display:none}}
+.final{font-weight:bold;border-top:2px solid #111}
+.sign{margin-top:80px;display:flex;justify-content:space-between}
 </style>
+
 </head>
+
 <body>
 
 <div class="company">
-<b>${escapeHTML(cname)}</b>
-<span>${escapeHTML(caddress)}</span>
+<b>${esc(cname)}</b>
+<span>${esc(caddress)}</span>
 </div>
 
 <div class="title">PURCHASE ORDER</div>
 
 <div class="meta">
-<span><b>PO No.:</b> ${escapeHTML(x.id)}</span>
-<span><b>Date:</b> ${escapeHTML(x.date)}</span>
+<span><b>PO No.:</b> ${esc(x.id)}</span>
+<span><b>Date:</b> ${esc(x.date)}</span>
 </div>
 
-<p><b>Supplier:</b> ${escapeHTML(x.supplier)}</p>
+<p><b>Supplier:</b> ${esc(x.supplier)}</p>
 
 <table>
+
 <tr>
 <th>Sr.No.</th>
 <th>Material</th>
@@ -1303,19 +1491,37 @@ th{background:#f2f2f2;text-align:left}
 
 <tr>
 <td>1</td>
-<td>${escapeHTML(x.material)}</td>
-<td>${x.qty}</td>
-<td>${escapeHTML(x.unit)}</td>
-<td>₹ ${(+x.rate||0).toFixed(2)}</td>
+<td>${esc(x.material)}</td>
+<td>${esc(x.qty)}</td>
+<td>${esc(x.unit)}</td>
+<td>₹ ${Number(x.rate||0).toFixed(2)}</td>
 <td>₹ ${a.subtotal.toFixed(2)}</td>
 </tr>
+
 </table>
 
 <div class="totals">
-<div><span>Subtotal</span><b>₹ ${a.subtotal.toFixed(2)}</b></div>
-<div><span>Discount (${+x.discount||0}%)</span><b>- ₹ ${a.discountAmount.toFixed(2)}</b></div>
-<div><span>GST (${+x.gst||0}%)</span><b>₹ ${a.gstAmount.toFixed(2)}</b></div>
-<div class="final"><span>FINAL AMOUNT</span><b>₹ ${a.finalAmount.toFixed(2)}</b></div>
+
+<div>
+<span>Subtotal</span>
+<b>₹ ${a.subtotal.toFixed(2)}</b>
+</div>
+
+<div>
+<span>Discount</span>
+<b>- ₹ ${a.discountAmount.toFixed(2)}</b>
+</div>
+
+<div>
+<span>GST</span>
+<b>₹ ${a.gstAmount.toFixed(2)}</b>
+</div>
+
+<div class="final">
+<span>FINAL AMOUNT</span>
+<b>₹ ${a.finalAmount.toFixed(2)}</b>
+</div>
+
 </div>
 
 <div class="sign">
@@ -1323,314 +1529,587 @@ th{background:#f2f2f2;text-align:left}
 <span>Approved By: __________________</span>
 </div>
 
-<div style="text-align:center;margin-top:25px">
+<br>
+
 <button onclick="window.print()">PRINT</button>
-</div>
 
 </body>
 </html>
 `);
 
- w.document.close();
+w.document.close();
 
 }
 
 
+/* =========================
+   RECEIVE MATERIAL
+========================= */
+
 function openReceive(i){
 
- show('receive');
+showPage('receive');
 
- document.getElementById('receivePO').value=String(i);
+document.getElementById('receivePO').value=String(i);
 
- loadReceivePO();
+loadReceivePO();
 
 }
 
 
 function loadReceivePO(){
 
- const select=document.getElementById('receivePO');
- const i=select.value;
- const x=D.pos[i];
+const i=Number(document.getElementById('receivePO').value);
 
- if(!x){
+const x=D.pos[i];
 
-   document.getElementById('receiveMaterial').value='';
-   document.getElementById('receiveOrdered').value='';
-   document.getElementById('receiveAlready').value='';
-   document.getElementById('receiveQty').value='';
+if(!x){
 
-   return;
- }
+document.getElementById('receiveMaterial').value='';
+document.getElementById('receiveOrdered').value='';
+document.getElementById('receiveAlready').value='';
+document.getElementById('receiveQty').value='';
 
- const remaining=Math.max(
- 0,
- (+x.qty||0)-(+x.receivedQty||0)
- );
+return;
 
- document.getElementById('receiveMaterial').value=x.material||'';
- document.getElementById('receiveOrdered').value=x.qty||0;
- document.getElementById('receiveAlready').value=x.receivedQty||0;
- document.getElementById('receiveQty').value=remaining;
+}
+
+const remaining=
+Math.max(0,Number(x.qty||0)-Number(x.receivedQty||0));
+
+document.getElementById('receiveMaterial').value=x.material||'';
+document.getElementById('receiveOrdered').value=x.qty||0;
+document.getElementById('receiveAlready').value=x.receivedQty||0;
+document.getElementById('receiveQty').value=remaining;
 
 }
 
 
 function saveReceipt(){
 
- const i=+document.getElementById('receivePO').value;
- const x=D.pos[i];
+const i=Number(document.getElementById('receivePO').value);
 
- if(!x)return alert('Select a Purchase Order.');
+const x=D.pos[i];
 
- const remaining=Math.max(
- 0,
- (+x.qty||0)-(+x.receivedQty||0)
- );
+if(!x){
 
- const q=+document.getElementById('receiveQty').value;
+alert('Select a Purchase Order.');
+return;
 
- if(!q||q<=0||q>remaining)
- return alert('Enter a valid receive quantity. Remaining: '+remaining);
+}
 
- let idx=D.stock.findIndex(
- m=>String(m.name).trim().toLowerCase()===
- String(x.material).trim().toLowerCase()
- );
+const remaining=
+Math.max(0,Number(x.qty||0)-Number(x.receivedQty||0));
 
- if(idx<0){
+const q=Number(document.getElementById('receiveQty').value);
 
-   D.stock.push({
-     code:'MAT-'+String(D.stock.length+1).padStart(3,'0'),
-     name:x.material,
-     unit:x.unit||'Nos.',
-     qty:q,
-     min:0
-   });
+if(!q||q<=0||q>remaining){
 
- }else{
+alert('Enter valid receive quantity. Remaining: '+remaining);
+return;
 
-   D.stock[idx].qty=(+D.stock[idx].qty||0)+q;
+}
 
- }
+let idx=D.stock.findIndex(m=>
+String(m.name).trim().toLowerCase()===
+String(x.material).trim().toLowerCase()
+);
 
- x.receivedQty=(+x.receivedQty||0)+q;
+if(idx<0){
 
- x.status=x.receivedQty>=x.qty?'Received':'Partially Received';
+D.stock.push({
 
- x.receiveDate=
- document.getElementById('receiveDate').value||
- new Date().toLocaleDateString('en-IN');
+code:'MAT-'+String(D.stock.length+1).padStart(3,'0'),
+name:x.material,
+unit:x.unit||'Nos.',
+qty:q,
+min:0
 
- x.receiveRemarks=
- document.getElementById('receiveRemarks').value||'';
+});
 
- save();
+}else{
 
- loadReceivePO();
+D.stock[idx].qty=
+Number(D.stock[idx].qty||0)+q;
 
- alert(q+' '+x.material+' received. Stock increased automatically.');
+}
+
+x.receivedQty=
+Number(x.receivedQty||0)+q;
+
+x.status=
+x.receivedQty>=x.qty?
+'Received':
+'Partially Received';
+
+x.receiveDate=
+document.getElementById('receiveDate').value||
+new Date().toLocaleDateString('en-IN');
+
+x.receiveRemarks=
+document.getElementById('receiveRemarks').value||'';
+
+save();
+
+loadReceivePO();
+
+alert(q+' '+x.material+
+' received. Stock increased automatically.');
 
 }
 
 
+/* =========================
+   ISSUE MATERIAL
+========================= */
+
 function loadIssueStock(){
 
- const i=+document.getElementById('issueMaterial').value;
+const i=Number(
+document.getElementById('issueMaterial').value
+);
 
- const x=D.stock[i];
+const x=D.stock[i];
 
- document.getElementById('issueAvailable').value=x?x.qty:0;
+document.getElementById('issueAvailable').value=
+x?x.qty:0;
 
 }
 
 
 function saveIssue(){
 
- const i=+document.getElementById('issueMaterial').value;
- const x=D.stock[i];
+const i=Number(
+document.getElementById('issueMaterial').value
+);
 
- if(!x)return alert('Select a material.');
+const x=D.stock[i];
 
- const q=+document.getElementById('issueQty').value;
+if(!x){
 
- if(!q||q<=0||q>x.qty)
- return alert('Enter a valid quantity. Available stock: '+x.qty);
-
- const to=document.getElementById('issueTo').value.trim();
-
- if(!to)return alert('Enter Issued To / Department.');
-
- x.qty-=q;
-
- D.issued.push({
-   date:document.getElementById('issueDate').value||
-   new Date().toLocaleDateString('en-IN'),
-   material:x.name,
-   qty:q,
-   unit:x.unit,
-   to:to,
-   remarks:document.getElementById('issueRemarks').value||'',
-   user:'admin'
- });
-
- save();
-
- document.getElementById('issueQty').value='';
- document.getElementById('issueTo').value='';
- document.getElementById('issueRemarks').value='';
-
- loadIssueStock();
-
- alert(q+' '+x.name+' issued. Stock reduced automatically.');
+alert('Select a material.');
+return;
 
 }
 
+const q=Number(
+document.getElementById('issueQty').value
+);
+
+if(!q||q<=0||q>x.qty){
+
+alert('Enter valid quantity. Available stock: '+x.qty);
+return;
+
+}
+
+const to=document.getElementById('issueTo').value.trim();
+
+if(!to){
+
+alert('Enter Issued To / Department.');
+return;
+
+}
+
+x.qty-=q;
+
+D.issued.push({
+
+date:
+document.getElementById('issueDate').value||
+new Date().toLocaleDateString('en-IN'),
+
+material:x.name,
+qty:q,
+unit:x.unit,
+to:to,
+remarks:document.getElementById('issueRemarks').value||'',
+user:'admin'
+
+});
+
+save();
+
+document.getElementById('issueQty').value='';
+document.getElementById('issueTo').value='';
+document.getElementById('issueRemarks').value='';
+
+loadIssueStock();
+
+alert(q+' '+x.name+' issued. Stock reduced automatically.');
+
+}
+
+
+/* =========================
+   SUPPLIER
+========================= */
 
 function addSupplier(){
 
- const name=document.getElementById('sname').value.trim();
+const name=document.getElementById('sname').value.trim();
 
- if(!name)return alert('Enter supplier');
+if(!name){
 
- D.sup.push({
-   name:name,
-   contact:document.getElementById('scontact').value,
-   phone:document.getElementById('sphone').value,
-   email:document.getElementById('semail').value
- });
-
- save();
-
- document.getElementById('sname').value='';
- document.getElementById('scontact').value='';
- document.getElementById('sphone').value='';
- document.getElementById('semail').value='';
-
- alert('Supplier saved');
+alert('Enter supplier');
+return;
 
 }
 
+D.sup.push({
+
+name:name,
+contact:document.getElementById('scontact').value,
+phone:document.getElementById('sphone').value,
+email:document.getElementById('semail').value
+
+});
+
+save();
+
+document.getElementById('sname').value='';
+document.getElementById('scontact').value='';
+document.getElementById('sphone').value='';
+document.getElementById('semail').value='';
+
+alert('Supplier saved');
+
+}
+
+
+/* =========================
+   COMPANY
+========================= */
 
 function saveCompany(){
 
- const n=document.getElementById('cname').value.trim()||
- 'BML Parenteral Drugs';
+const n=document.getElementById('cname').value.trim()||
+'BML Parenteral Drugs';
 
- const a=document.getElementById('caddress').value.trim()||
- 'Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661';
+const a=document.getElementById('caddress').value.trim()||
+'Raipur Bhagwanpur Roorkee (Ukh)-247661';
 
- localStorage.setItem('companyName',n);
- localStorage.setItem('companyAddress',a);
+localStorage.setItem('companyName',n);
+localStorage.setItem('companyAddress',a);
 
- document.getElementById('companyName').textContent=n;
- document.getElementById('companyAddress').textContent=a;
-
- alert('Company heading saved.');
+alert('Company heading saved.');
 
 }
 
 
+/* =========================
+   REPORT
+========================= */
+
+function report(){
+
+const rows=[
+[
+'Type','SR.No','Indent No.','Date',
+'Department','Material Specification',
+'Qty','Unit','Delivery','Status'
+]
+];
+
+D.prs.forEach(x=>rows.push([
+'Purchase Request',
+x.id,
+x.indent||'',
+x.date||'',
+x.dept||'',
+x.spec||'',
+x.qty||'',
+x.unit||'',
+x.delivery||'',
+x.status||''
+]));
+
+D.pos.forEach(x=>rows.push([
+'Purchase Order',
+x.id,
+'',
+x.date||'',
+'',
+x.material||'',
+x.qty||'',
+x.unit||'',
+'',
+x.status||''
+]));
+
+const csv=rows.map(r=>
+r.map(x=>'"'+String(x).replaceAll('"','""')+'"').join(',')
+).join('\n');
+
+const a=document.createElement('a');
+
+a.href=URL.createObjectURL(
+new Blob([csv],{type:'text/csv'})
+);
+
+a.download='EngiStore_Report.csv';
+
+a.click();
+
+}
+
+
+/* =========================
+   UPDATE SYSTEM
+========================= */
+
+function showUpdate(message,buttonHtml=''){
+
+const box=document.getElementById('updateStatus');
+
+box.innerHTML=message+buttonHtml;
+
+box.style.display='block';
+
+}
+
+
+function checkForUpdate(){
+
+if(!window.engistoreUpdate){
+
+showUpdate(
+'Update service is not available. Please install the latest build.'
+);
+
+return;
+
+}
+
+showUpdate('Checking for update...');
+
+window.engistoreUpdate.check()
+.then(function(result){
+
+if(result && result.error){
+
+showUpdate(
+'Update check failed: '+result.error
+);
+
+}
+
+})
+.catch(function(error){
+
+showUpdate(
+'Update check failed: '+error.message
+);
+
+});
+
+}
+
+
+if(window.engistoreUpdate){
+
+window.engistoreUpdate.onStatus(function(x){
+
+if(!x)return;
+
+if(x.type==='checking'){
+
+showUpdate('Checking for update...');
+
+}
+
+else if(x.type==='none'){
+
+showUpdate('You are using the latest version.');
+
+setTimeout(function(){
+
+document.getElementById('updateStatus')
+.style.display='none';
+
+},3500);
+
+}
+
+else if(x.type==='available'){
+
+showUpdate(
+'New version '+x.version+
+' is available. Starting download...'
+);
+
+}
+
+else if(x.type==='progress'){
+
+showUpdate(
+'Downloading update: '+
+x.percent+'%'
+);
+
+}
+
+else if(x.type==='downloaded'){
+
+showUpdate(
+'Update '+x.version+
+' is ready.',
+'<button class="btn" onclick="window.engistoreUpdate.install()">Install & Restart</button>'
+);
+
+}
+
+else if(x.type==='error'){
+
+showUpdate(
+'Update error: '+(x.message||'Unknown error')
+);
+
+}
+
+});
+
+}
+
+
+/* =========================
+   REFRESH
+========================= */
+
 function refresh(){
 
- document.getElementById('companyName').textContent=
- localStorage.getItem('companyName')||
- 'BML Parenteral Drugs';
+const cname=
+localStorage.getItem('companyName')||
+'BML Parenteral Drugs';
 
- document.getElementById('companyAddress').textContent=
- localStorage.getItem('companyAddress')||
- 'Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661';
+const caddress=
+localStorage.getItem('companyAddress')||
+'Raipur Bhagwanpur Roorkee (Ukh)-247661';
 
- document.getElementById('mpr').textContent=D.prs.length;
- document.getElementById('mpo').textContent=D.pos.length;
+if(document.getElementById('cname'))
+document.getElementById('cname').value=cname;
 
- document.getElementById('mls').textContent=
- D.stock.filter(x=>(+x.qty||0)<=(+x.min||0)).length;
-
- document.getElementById('msup').textContent=D.sup.length;
- document.getElementById('missued').textContent=D.issued.length;
+if(document.getElementById('caddress'))
+document.getElementById('caddress').value=caddress;
 
 
- document.getElementById('aprfile').innerHTML=
- D.prs.map((x,i)=>`
+document.getElementById('mpr').textContent=D.prs.length;
+document.getElementById('mpo').textContent=D.pos.length;
+document.getElementById('mls').textContent=
+D.stock.filter(x=>Number(x.qty)<=Number(x.min)).length;
+document.getElementById('msup').textContent=D.sup.length;
+document.getElementById('missued').textContent=D.issued.length;
+
+
+document.getElementById('aprfile').innerHTML=
+D.prs.map((x,i)=>`
 
 <tr>
-<td>${x.id}</td>
-<td>${escapeHTML(x.indent)}</td>
-<td>${escapeHTML(x.date)}</td>
-<td>${escapeHTML(x.dept)}</td>
-<td>${escapeHTML(x.spec)}</td>
-<td>${x.qty} ${escapeHTML(x.unit)}</td>
+
+<td>${esc(x.id)}</td>
+<td>${esc(x.indent)}</td>
+<td>${esc(x.date)}</td>
+<td>${esc(x.dept)}</td>
+<td>${esc(x.spec)}</td>
+<td>${esc(x.qty)} ${esc(x.unit)}</td>
+
 <td>
 <span class="badge ${x.delivery==='Most Urgent'?'low':''}">
-${escapeHTML(x.delivery)}
+${esc(x.delivery)}
 </span>
 </td>
 
 <td>
 
-<button class="btn" onclick="editPR(${i})">Edit</button>
-
-<button class="btn" style="background:#b42318"
-onclick="deletePR(${i})">Delete</button>
+<button class="btn" onclick="editPR(${i})">
+Edit
+</button>
 
 <button class="btn"
-onclick="printPR(D.prs[${i}])">Print</button>
+style="background:#b42318"
+onclick="deletePR(${i})">
+Delete
+</button>
+
+<button class="btn"
+onclick="printPR(D.prs[${i}])">
+Print
+</button>
 
 </td>
+
 </tr>
 
 `).join('');
 
 
- const inds=[
- ...new Set(
- D.prs.map(x=>String(x.indent||'').trim()).filter(Boolean)
- )
- ];
+const inds=[
+...new Set(
+D.prs
+.map(x=>String(x.indent||'').trim())
+.filter(Boolean)
+)
+];
 
- document.getElementById('printIndent').innerHTML=
- '<option value="">Select Indent No.</option>'+
- inds.map(i=>`<option value="${escapeHTML(i)}">${escapeHTML(i)}</option>`).join('');
+document.getElementById('printIndent').innerHTML=
+'<option value="">Select Indent No.</option>'+
+inds.map(i=>
+'<option value="'+esc(i)+'">'+esc(i)+'</option>'
+).join('');
 
 
- document.getElementById('apos').innerHTML=
- D.pos.map((x,i)=>{
+document.getElementById('apos').innerHTML=
+D.pos.map((x,i)=>{
 
- const a=poAmounts(
- x.qty,x.rate,x.discount,
- x.gst===undefined?18:x.gst
- );
+const a=poAmounts(
+x.qty,
+x.rate,
+x.discount,
+x.gst===undefined?18:x.gst
+);
 
- return`
+return`
 
 <tr>
 
-<td>${escapeHTML(x.id)}</td>
-<td>${escapeHTML(x.supplier)}</td>
-<td>${escapeHTML(x.material)}</td>
-<td>${x.qty} ${escapeHTML(x.unit||'')}</td>
+<td>${esc(x.id)}</td>
+<td>${esc(x.supplier)}</td>
+<td>${esc(x.material)}</td>
+<td>${esc(x.qty)} ${esc(x.unit)}</td>
 <td>₹ ${a.subtotal.toFixed(2)}</td>
 <td>₹ ${a.discountAmount.toFixed(2)}</td>
 <td>₹ ${a.gstAmount.toFixed(2)}</td>
 <td><b>₹ ${a.finalAmount.toFixed(2)}</b></td>
 
 <td>
-<span class="badge">${escapeHTML(x.status||'Approved')}</span>
+<span class="badge">
+${esc(x.status||'Approved')}
+</span>
 </td>
 
 <td>
 
-<button class="btn" onclick="editPO(${i})">Edit</button>
-
-<button class="btn" style="background:#b42318"
-onclick="deletePO(${i})">Delete</button>
-
-<button class="btn" style="background:#18794e"
-onclick="openReceive(${i})">Receive</button>
+<button class="btn" onclick="editPO(${i})">
+Edit
+</button>
 
 <button class="btn"
-onclick="printPO(D.pos[${i}])">Print</button>
+style="background:#b42318"
+onclick="deletePO(${i})">
+Delete
+</button>
+
+<button class="btn"
+style="background:#18794e"
+onclick="openReceive(${i})">
+Receive
+</button>
+
+<button class="btn"
+onclick="printPO(D.pos[${i}])">
+Print
+</button>
 
 </td>
 
@@ -1638,70 +2117,88 @@ onclick="printPO(D.pos[${i}])">Print</button>
 
 `;
 
- }).join('');
+}).join('');
 
 
- document.getElementById('receivePO').innerHTML=
- '<option value="">Select Purchase Order</option>'+
- D.pos.map((x,i)=>{
+document.getElementById('receivePO').innerHTML=
+'<option value="">Select Purchase Order</option>'+
+D.pos.map((x,i)=>{
 
- const bal=Math.max(
- 0,(+x.qty||0)-(+x.receivedQty||0)
- );
+const bal=Math.max(
+0,
+Number(x.qty||0)-Number(x.receivedQty||0)
+);
 
- return bal>0?
- `<option value="${i}">
- ${escapeHTML(x.id)} - ${escapeHTML(x.material)}
- (Balance: ${bal})
- </option>`:'';
+if(bal<=0)return'';
 
- }).join('');
+return`
+<option value="${i}">
+${esc(x.id)} - ${esc(x.material)}
+(Balance: ${bal})
+</option>
+`;
+
+}).join('');
 
 
- document.getElementById('areceive').innerHTML=
- D.pos.map(x=>{
+document.getElementById('areceive').innerHTML=
+D.pos.map(x=>{
 
- const rec=+x.receivedQty||0;
- const bal=Math.max(0,(+x.qty||0)-rec);
+const rec=Number(x.receivedQty||0);
 
- return`
+const bal=Math.max(
+0,
+Number(x.qty||0)-rec
+);
+
+return`
 
 <tr>
-<td>${escapeHTML(x.id)}</td>
-<td>${escapeHTML(x.supplier)}</td>
-<td>${escapeHTML(x.material)}</td>
-<td>${x.qty}</td>
+
+<td>${esc(x.id)}</td>
+<td>${esc(x.supplier)}</td>
+<td>${esc(x.material)}</td>
+<td>${esc(x.qty)}</td>
 <td>${rec}</td>
 <td>${bal}</td>
+
 <td>
-<span class="badge">${escapeHTML(x.status||'Approved')}</span>
+<span class="badge">
+${esc(x.status||'Approved')}
+</span>
 </td>
+
 </tr>
 
 `;
 
- }).join('');
+}).join('');
 
 
- document.getElementById('issueMaterial').innerHTML=
- '<option value="">Select Material</option>'+
- D.stock.map((x,i)=>
- `<option value="${i}">
- ${escapeHTML(x.name)} (Available: ${x.qty} ${escapeHTML(x.unit)})
- </option>`
- ).join('');
+document.getElementById('issueMaterial').innerHTML=
+'<option value="">Select Material</option>'+
+D.stock.map((x,i)=>`
+
+<option value="${i}">
+${esc(x.name)}
+(Available: ${esc(x.qty)} ${esc(x.unit)})
+</option>
+
+`).join('');
+
+loadIssueStock();
 
 
- document.getElementById('astock').innerHTML=
- D.stock.map((x,i)=>`
+document.getElementById('astock').innerHTML=
+D.stock.map((x,i)=>`
 
 <tr>
 
-<td>${escapeHTML(x.code)}</td>
-<td>${escapeHTML(x.name)}</td>
-<td>${escapeHTML(x.unit)}</td>
-<td>${x.qty}</td>
-<td>${x.min}</td>
+<td>${esc(x.code)}</td>
+<td>${esc(x.name)}</td>
+<td>${esc(x.unit)}</td>
+<td>${esc(x.qty)}</td>
+<td>${esc(x.min)}</td>
 
 <td>
 <span class="badge ${x.qty<=x.min?'low':''}">
@@ -1710,9 +2207,13 @@ ${x.qty<=x.min?'LOW STOCK':'OK'}
 </td>
 
 <td>
+
 <button class="btn"
 style="background:#7a3e9d"
-onclick="issueStock(${i})">Issue</button>
+onclick="document.getElementById('issueMaterial').value='${i}';loadIssueStock();showPage('issue')">
+Issue
+</button>
+
 </td>
 
 </tr>
@@ -1720,219 +2221,66 @@ onclick="issueStock(${i})">Issue</button>
 `).join('');
 
 
- document.getElementById('asup').innerHTML=
- D.sup.map(x=>`
+document.getElementById('asup').innerHTML=
+D.sup.map(x=>`
 
 <tr>
-<td>${escapeHTML(x.name)}</td>
-<td>${escapeHTML(x.contact)}</td>
-<td>${escapeHTML(x.phone)}</td>
-<td>${escapeHTML(x.email)}</td>
+<td>${esc(x.name)}</td>
+<td>${esc(x.contact)}</td>
+<td>${esc(x.phone)}</td>
+<td>${esc(x.email)}</td>
 </tr>
 
 `).join('');
 
 
- document.getElementById('aissued').innerHTML=
- D.issued.map(x=>`
+document.getElementById('aissued').innerHTML=
+D.issued.map(x=>`
 
 <tr>
-<td>${escapeHTML(x.date)}</td>
-<td>${escapeHTML(x.material)}</td>
-<td>${x.qty}</td>
-<td>${escapeHTML(x.unit)}</td>
-<td>${escapeHTML(x.to)}</td>
-<td>${escapeHTML(x.remarks)}</td>
-<td>${escapeHTML(x.user)}</td>
+<td>${esc(x.date)}</td>
+<td>${esc(x.material)}</td>
+<td>${esc(x.qty)}</td>
+<td>${esc(x.unit)}</td>
+<td>${esc(x.to)}</td>
+<td>${esc(x.remarks||'')}</td>
+<td>${esc(x.user||'')}</td>
 </tr>
 
 `).join('');
 
 
- document.getElementById('rv').textContent=
- '₹ '+D.pos.reduce((a,x)=>a+(+x.total||0),0).toFixed(2);
+document.getElementById('rv').textContent=
+'₹ '+D.pos.reduce(
+(a,x)=>a+Number(x.total||0),0
+).toFixed(2);
 
- document.getElementById('rs').textContent=D.sup.length;
-
-}
-
-
-function issueStock(i){
-
- const x=D.stock[i];
-
- if(!x)return;
-
- const q=prompt(
- 'Issue quantity (available '+x.qty+'):',
- '1'
- );
-
- if(q===null)return;
-
- const qty=+q;
-
- if(!qty||qty<0||qty>x.qty)
- return alert('Enter a valid quantity.');
-
- const to=prompt('Issued To / Department:','');
-
- if(to===null)return;
-
- const rem=prompt('Remarks:','');
-
- if(rem===null)return;
-
- x.qty-=qty;
-
- D.issued.push({
-   date:new Date().toLocaleDateString('en-IN'),
-   material:x.name,
-   qty:qty,
-   unit:x.unit,
-   to:to,
-   remarks:rem,
-   user:'admin'
- });
-
- save();
-
- alert('Item issued. Stock updated automatically.');
+document.getElementById('rs').textContent=D.sup.length;
 
 }
 
 
-function report(){
+/* =========================
+   SAFE HTML
+========================= */
 
- const rows=[
- ['Type','SR.No','Indent No.','Date','Department','Material Specification','Qty','Unit','Delivery','Status'],
+function esc(value){
 
- ...D.prs.map(x=>[
- 'Purchase Request',
- x.id,
- x.indent||'',
- x.date,
- x.dept,
- x.spec,
- x.qty,
- x.unit,
- x.delivery,
- x.status
- ]),
-
- ...D.pos.map(x=>[
- 'Purchase Order',
- x.id,
- '',
- x.date||'',
- '',
- x.material,
- x.qty,
- x.unit,
- '',
- x.status
- ])
- ];
-
- const csv=rows
- .map(r=>r.map(x=>`"${String(x??'').replace(/"/g,'""')}"`).join(','))
- .join('\n');
-
- const a=document.createElement('a');
-
- a.href=URL.createObjectURL(
- new Blob([csv],{type:'text/csv'})
- );
-
- a.download='EngiStore_Report.csv';
-
- a.click();
+return String(value??'')
+.replaceAll('&','&amp;')
+.replaceAll('<','&lt;')
+.replaceAll('>','&gt;')
+.replaceAll('"','&quot;')
+.replaceAll("'","&#039;");
 
 }
 
 
-function showUpdate(msg,button){
+/* =========================
+   START
+========================= */
 
- const e=document.getElementById('updateStatus');
-
- e.innerHTML=msg+(button||'');
-
- e.style.display='block';
-
-}
-
-
-function checkForUpdate(){
-
- if(!window.engistoreUpdate){
-
-   alert('Update service is not available in this build.');
-
-   return;
-
- }
-
- showUpdate('Checking for update...');
-
- window.engistoreUpdate.check()
- .then(function(r){
-
-   if(r&&r.error)
-   showUpdate('Update check failed: '+r.error);
-
- });
-
-}
-
-
-if(window.engistoreUpdate){
-
- window.engistoreUpdate.onStatus(function(x){
-
-   if(x.type==='checking'){
-
-     showUpdate('Checking for update...');
-
-   }else if(x.type==='none'){
-
-     showUpdate('You are using the latest version.');
-
-     setTimeout(function(){
-
-       document.getElementById('updateStatus').style.display='none';
-
-     },3500);
-
-   }else if(x.type==='available'){
-
-     showUpdate(
-       'New version '+x.version+' is available. Downloading...'
-     );
-
-   }else if(x.type==='progress'){
-
-     showUpdate(
-       'Downloading update: '+x.percent+'%'
-     );
-
-   }else if(x.type==='downloaded'){
-
-     showUpdate(
-       'Update '+x.version+
-       ' is ready. '+
-       '<button class="btn" onclick="window.engistoreUpdate.install()" style="margin-left:8px">'+
-       'Install & Restart</button>'
-     );
-
-   }else if(x.type==='error'){
-
-     showUpdate('Update error: '+x.message);
-
-   }
-
- });
-
-}
+refresh();
 
 </script>
 
