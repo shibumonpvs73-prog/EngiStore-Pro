@@ -51,23 +51,18 @@ function createWindow() {
   });
 
 
- autoUpdater.on('update-available', (info) => {
-
-  sendUpdateStatus({
-    type: 'available',
-    version: info.version
-  });
-
-  autoUpdater.downloadUpdate().catch((err) => {
+  autoUpdater.on('update-available', (info) => {
 
     sendUpdateStatus({
-      type: 'error',
-      message: err.message || 'Download failed'
+      type: 'available',
+      version: info.version
     });
+
+    // autoDownload=true होने के कारण
+    // यहाँ downloadUpdate() दोबारा नहीं चलाना है।
 
   });
 
-});
 
   autoUpdater.on('update-not-available', (info) => {
 
@@ -155,6 +150,13 @@ ipcMain.handle(
 
     } catch (error) {
 
+      sendUpdateStatus({
+        type: 'error',
+        message:
+          error?.message ||
+          'Unable to check for update'
+      });
+
       return {
         success: false,
         error:
@@ -209,14 +211,20 @@ app.whenReady().then(() => {
   createWindow();
 
 
-  // Give Electron a moment to
-  // finish loading the application.
+  // Automatic update check
+  // after application starts.
   setTimeout(() => {
 
     autoUpdater.checkForUpdates()
-      .catch(() => {
-        // Update check failure is
-        // already handled by updater event.
+      .catch((error) => {
+
+        sendUpdateStatus({
+          type: 'error',
+          message:
+            error?.message ||
+            'Update check failed'
+        });
+
       });
 
   }, 5000);
