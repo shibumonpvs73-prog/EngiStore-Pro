@@ -7,7 +7,7 @@ let mainWindow = null;
 // ===============================
 // AUTO UPDATE SETTINGS
 // ===============================
-autoUpdater.autoDownload = true;
+autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = true;
 autoUpdater.allowDowngrade = false;
 
