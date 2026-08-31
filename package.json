@@ -1,45 +1,34 @@
 {
   "name": "engistore-pro",
-  "version": "2.4.2"
-  "description": "Engineering Purchase & Inventory Software",
+  "version": "2.4.2",
+  "description": "EngiStore Pro - Engineering Purchase & Inventory",
   "main": "main.js",
+  "author": "BML Parenteral Drugs",
+  "license": "MIT",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder --win nsis",
-    "dist": "electron-builder --win nsis --publish never",
-    "release": "electron-builder --win nsis --publish always"
-  },
-  "devDependencies": {
-    "electron": "^31.7.7",
-    "electron-builder": "^24.13.3"
-  },
-  "build": {
-    "appId": "com.bmlparenteral.engistore",
-    "productName": "EngiStore Pro",
-    "icon": "icon.ico",
-    "win": {
-      "target": [
-        "nsis"
-      ],
-      "icon": "icon.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "EngiStore Pro"
-    },
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "shibumonpvs73-prog",
-        "repo": "EngiStore-Pro",
-        "releaseType": "release"
-      }
-    ]
+    "dist": "electron-builder --win"
   },
   "dependencies": {
-    "electron-updater": "^6.3.9"
+    "electron-updater": "^6.6.2"
+  },
+  "devDependencies": {
+    "electron": "^37.2.6",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.bml.engistorepro",
+    "productName": "EngiStore Pro",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "shibumonpvs73-prog",
+      "repo": "EngiStore-Pro"
+    }
   }
 }
