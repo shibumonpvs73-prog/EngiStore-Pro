@@ -1,20 +1,20 @@
 {
   "name": "engistore-pro",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "EngiStore Pro - Engineering Purchase & Inventory",
   "main": "main.js",
   "author": "BML Parenteral Drugs",
   "license": "MIT",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --win"
+    "dist": "electron-builder --win --publish never"
   },
   "dependencies": {
     "electron-updater": "^6.6.2"
   },
   "devDependencies": {
-    "electron": "^37.2.6",
-    "electron-builder": "^26.0.12"
+    "electron": "^37.10.3",
+    "electron-builder": "^26.15.3"
   },
   "build": {
     "appId": "com.bml.engistorepro",
