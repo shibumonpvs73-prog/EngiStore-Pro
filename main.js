@@ -51,15 +51,23 @@ function createWindow() {
   });
 
 
-  autoUpdater.on('update-available', (info) => {
+ autoUpdater.on('update-available', (info) => {
+
+  sendUpdateStatus({
+    type: 'available',
+    version: info.version
+  });
+
+  autoUpdater.downloadUpdate().catch((err) => {
 
     sendUpdateStatus({
-      type: 'available',
-      version: info.version
+      type: 'error',
+      message: err.message || 'Download failed'
     });
 
   });
 
+});
 
   autoUpdater.on('update-not-available', (info) => {
 
