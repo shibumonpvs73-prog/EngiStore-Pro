@@ -20,8 +20,9 @@
     "appId": "com.bml.engistorepro",
     "productName": "EngiStore Pro",
     "directories": {
-      "output": "dist"
-    "win": {
+  "output": "dist"
+},
+"win": {
   "target": "nsis"
 },
 "artifactName": "EngiStore-Pro-Setup-${version}.${ext}",
