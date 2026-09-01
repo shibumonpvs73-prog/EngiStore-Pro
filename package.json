@@ -21,10 +21,10 @@
     "productName": "EngiStore Pro",
     "directories": {
       "output": "dist"
-    },
     "win": {
-      "target": "nsis"
-    },
+  "target": "nsis"
+},
+"artifactName": "EngiStore-Pro-Setup-${version}.${ext}",
     "publish": {
       "provider": "github",
       "owner": "shibumonpvs73-prog",
