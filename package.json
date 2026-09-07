@@ -1,17 +1,60 @@
 {
   "name": "engistore-pro",
-  "version": "2.4.7",
+  "version": "2.5.3",
   "description": "EngiStore Pro - Engineering Purchase & Inventory",
-  "main": "server.js",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shibumonpvs73-prog/EngiStore-Pro.git"
+  },
   "author": "BML Parenteral Drugs",
   "license": "MIT",
   "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js",
-    "build": "mkdir -p dist && cp index.html dist/ 2>/dev/null || true",
-    "lint": "node -c server.js"
+    "dev": "electron .",
+    "start": "electron .",
+    "dist": "electron-builder --win nsis --publish never",
+    "release": "electron-builder --win nsis --publish always",
+    "lint": "node --check server.js && node --check main.js"
   },
   "dependencies": {
     "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "electron": "31.7.7",
+    "electron-builder": "24.13.3",
+    "electron-updater": "6.3.9"
+  },
+  "build": {
+    "appId": "com.bmlparenteraldrugs.engistorepro",
+    "productName": "EngiStore Pro",
+    "artifactName": "EngiStore-Pro-Setup-${version}.${ext}",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "server.js",
+      "main.js",
+      "preload.js",
+      "sw.js",
+      "manifest.json",
+      "icon.ico",
+      "data/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "EngiStore Pro"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "BMLParenteralDrugs",
+      "repo": "EngiStore-Pro"
+    }
   }
 }
