@@ -20,8 +20,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
-          cache: npm
+          node-version: 20
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund
@@ -29,8 +28,12 @@ jobs:
       - name: Apply Company & Security UI update
         run: node scripts/apply-company-security-update.js
 
+      - name: Verify Company & Security UI update
+        shell: bash
+        run: |
+          node -e "const fs=require('fs'); const h=fs.readFileSync('index.html','utf8'); if(h.includes('navUsersBtn') || h.includes('companyTopBadge') || !h.includes('companyUserManagement')) process.exit(1); console.log('UI update verified.');"
+
       - name: Sync patched UI back to main
-        if: startsWith(github.ref, 'refs/tags/')
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
