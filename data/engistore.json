@@ -1,0 +1,162 @@
+{
+  "version": "2.5",
+  "company": {
+    "name": "BML Parenteral Drugs Pvt Ltd",
+    "subtitle": "Engineering Purchase & Inventory",
+    "address": "Lakeshwari, Raipur, Bhagwanpur Roorkee-(UKh)-247661",
+    "phone": "+91 1332 234567",
+    "email": "procurement@bmlparenteral.com",
+    "gstin": "05AABCB1234D1Z6"
+  },
+  "users": [
+    {
+      "username": "admin",
+      "name": "System Administrator",
+      "role": "admin",
+      "password": "admin",
+      "createdAt": "2026-01-01"
+    },
+    {
+      "username": "purchase",
+      "name": "Purchase Officer",
+      "role": "manager",
+      "password": "purchase123",
+      "createdAt": "2026-01-01"
+    },
+    {
+      "username": "store",
+      "name": "Store Keeper",
+      "role": "store",
+      "password": "store123",
+      "createdAt": "2026-01-01"
+    },
+    {
+      "username": "engineer",
+      "name": "Plant Engineer",
+      "role": "engineer",
+      "password": "engineer123",
+      "createdAt": "2026-01-01"
+    }
+  ],
+  "prs": [
+    {
+      "id": 1,
+      "indent": "IND-2026-001",
+      "date": "2026-09-01",
+      "dept": "Engineering",
+      "spec": "Centrifugal Pump Impeller SS 316 150mm",
+      "qty": 2,
+      "unit": "Nos.",
+      "delivery": "Most Urgent",
+      "required": "2026-09-10",
+      "remarks": "Required for main boiler water feed line",
+      "requestedBy": "Plant Engineer",
+      "status": "Approved"
+    },
+    {
+      "id": 2,
+      "indent": "IND-2026-001",
+      "date": "2026-09-01",
+      "dept": "Maintenance",
+      "spec": "Mechanical Shaft Seal 35mm Carbon/Silicon",
+      "qty": 4,
+      "unit": "Nos.",
+      "delivery": "Standard",
+      "required": "2026-09-15",
+      "remarks": "Stock replenishment for annual maintenance",
+      "requestedBy": "Plant Engineer",
+      "status": "Approved"
+    }
+  ],
+  "pos": [
+    {
+      "id": 1,
+      "poNo": "PO-2026-001",
+      "indent": "IND-2026-001",
+      "srNo": 1,
+      "date": "2026-09-02",
+      "supplier": "Apex Industrial Spares Ltd",
+      "category": "Mechanical",
+      "material": "Centrifugal Pump Impeller SS 316 150mm",
+      "qty": 2,
+      "receivedQty": 0,
+      "unit": "Nos.",
+      "rate": 8500,
+      "discount": 5,
+      "gst": 18,
+      "total": 19139,
+      "status": "Approved",
+      "createdBy": "Purchase Officer"
+    }
+  ],
+  "stock": [
+    {
+      "code": "ENG-MEC-001",
+      "name": "Centrifugal Pump Impeller SS 316",
+      "unit": "Nos.",
+      "qty": 1,
+      "min": 2
+    },
+    {
+      "code": "ENG-ELC-002",
+      "name": "Induction Motor 5HP 3-Phase 1440RPM",
+      "unit": "Nos.",
+      "qty": 3,
+      "min": 1
+    },
+    {
+      "code": "ENG-PNE-003",
+      "name": "Pneumatic Solenoid Valve 24V DC",
+      "unit": "Nos.",
+      "qty": 8,
+      "min": 4
+    },
+    {
+      "code": "ENG-OIL-004",
+      "name": "Hydraulic Oil ISO VG 68",
+      "unit": "Ltr",
+      "qty": 180,
+      "min": 50
+    }
+  ],
+  "sup": [
+    {
+      "name": "Apex Industrial Spares Ltd",
+      "category": "Mechanical",
+      "address": "Plot 42, Sector 8, Industrial Estate, Haridwar, Uttarakhand - 249403",
+      "gst": "05AAACA1234F1Z8",
+      "contact": "Rajesh Sharma",
+      "phone": "+91 98234 11223",
+      "email": "sales@apexindustrial.com"
+    },
+    {
+      "name": "Sterling Electro Controls",
+      "category": "Electrical",
+      "address": "B-14 Industrial Area, Mohan Nagar, Ghaziabad, UP - 201007",
+      "gst": "09AABCS5432G1Z2",
+      "contact": "Anil Gupta",
+      "phone": "+91 94123 77889",
+      "email": "support@sterlingelectro.com"
+    },
+    {
+      "name": "National Pneumatics & Valves",
+      "category": "Instrumentation",
+      "address": "Shop 12-14, Phase-2, Transport Nagar, Dehradun, UK - 248001",
+      "gst": "05AABCN9876H1Z5",
+      "contact": "Vikram Singh",
+      "phone": "+91 98970 44556",
+      "email": "orders@nationalvalves.in"
+    }
+  ],
+  "issued": [
+    {
+      "date": "2026-09-03",
+      "material": "Hydraulic Oil ISO VG 68",
+      "qty": 20,
+      "unit": "Ltr",
+      "to": "Boiler House - Line 2",
+      "remarks": "Scheduled monthly oil top-up",
+      "user": "Store Keeper"
+    }
+  ]
+}

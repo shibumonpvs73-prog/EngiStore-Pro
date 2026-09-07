@@ -1,0 +1,49 @@
+================================================================================
+          ENGISTORE PRO - APNE SYSTEM MEIN INSTALL KARNE KA SETUP GUIDE
+================================================================================
+
+Aapke computer / laptop me EngiStore Pro install karne ke 2 aasan tareeqe hain:
+
+--------------------------------------------------------------------------------
+TAREEQA 1: BROWSER SE 1-CLICK DIRECT DESKTOP APP INSTALL (SABSE AASAAN - NO SETUP NEEDED)
+--------------------------------------------------------------------------------
+1. Google Chrome ya Microsoft Edge browser me EngiStore Pro khole.
+2. Top Header ya Sidebar me diye gaye "📥 Install Desktop App" button par click kare
+   (ya Browser URL bar me aane wale install icon par click kare).
+3. "Install" par click karte hi EngiStore Pro ka App Icon aapke Desktop par ban jayega
+   aur yeh ek poori tarah se independent Desktop App ki tarah khul jayega!
+4. Koi bhi updates aane par "Auto Update" button se ek click me naye version me
+   update ho jayega.
+
+--------------------------------------------------------------------------------
+TAREEQA 2: APNE COMPUTER MEIN OFFLINE / LOCAL SERVER SETUP CHALANA (ZIP PACKAGE)
+--------------------------------------------------------------------------------
+Aapke system me Node.js hona chahiye (agar nahi hai toh https://nodejs.org se free download kare).
+
+SETUP STEPS:
+1. Is ZIP folder ko apne computer me kisi folder me Extract kare (Jaise: C:\EngiStore).
+2. "Install-EngiStore.bat" par double click kare.
+   - Yeh automatically system check karega.
+   - Dependencies install karega.
+   - Aur aapke Windows Desktop par official App Icon ke sath "EngiStore Pro" shortcut bana dega!
+3. Ab jab bhi chalana ho, bas Desktop par "EngiStore Pro" icon par double click kare!
+   - Yeh background mein silently/internally chalega bina kisi black command prompt window ke!
+   - Seedhe clean Desktop App Window open hogi!
+
+FILES INCLUDED IN THIS PACKAGE:
+- icon.ico              : Official Windows App Icon (Desktop Shortcut aur Taskbar ke liye)
+- icon.png              : High-Resolution App Icon Logo (512x512)
+- Install-EngiStore.bat : One-Time System Setup script
+- Start-EngiStore.bat   : Silent Application Launcher script
+- Stop-EngiStore.bat    : Background Server Stop script
+- Create-Desktop-Shortcut.vbs : Desktop par App Icon ke sath shortcut banane ka script
+- EngiStore-Launcher.vbs: Silent background runner script (zero terminal window)
+- server.js             : Local backend data synchronization server
+- index.html            : Complete EngiStore Pro UI & database application
+- data/                 : JSON Data storage folder
+
+Default Admin Login:
+Username: admin
+Password: admin
+
+================================================================================
