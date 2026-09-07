@@ -20,10 +20,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
+          cache: npm
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund
+
+      - name: Validate source
+        run: npm run lint
 
       - name: Build Windows installer
         run: npm run dist
@@ -35,8 +39,6 @@ jobs:
         run: |
           VERSION=$(node -p "require('./package.json').version")
           TAG="v$VERSION"
-
           echo "Publishing version: $VERSION"
           echo "Release tag: $TAG"
-
-          gh release upload "$TAG" dist/*.exe dist/*.blockmap dist/latest.yml --clobber
+          gh release create "$TAG" dist/*.exe dist/*.blockmap dist/latest.yml --title "EngiStore Pro v$VERSION" --generate-notes
